@@ -1,0 +1,68 @@
+import { ClassMap } from 'src/class/class.datamapper';
+import { ClassStudent } from './class_student.entity';
+import { ClassStudentModel } from './class_student.model';
+import { UserMap } from 'src/user/user.datamapper';
+import { ClassStudentResponseDTO } from 'src/class/dtos/class.dto';
+
+export class ClassStudentMap {
+  static toDomain(model: ClassStudentModel): ClassStudent {
+    if (!model) {
+      return null;
+    }
+    const {
+      id,
+      classId,
+      _class,
+      studentId,
+      student,
+      fee,
+      createdAt,
+      updatedAt,
+    } = model;
+
+    let classData = null;
+    if (_class) {
+      classData = ClassMap.toDomain(_class);
+    }
+    let studentData = null;
+    if (student) {
+      studentData = UserMap.toDomain(student);
+    }
+    const projectedProps = {
+      id,
+      classId,
+      _class: classData,
+      studentId,
+      student: studentData,
+      fee,
+      createdAt,
+      updatedAt,
+    };
+    return ClassStudent.create(projectedProps);
+  }
+
+  static toPersistence(entity: ClassStudent): ClassStudentModel {
+    const { classId, studentId, fee } = entity.props;
+    const raw = {
+      classId,
+      studentId,
+      fee,
+    };
+    return raw as ClassStudentModel;
+  }
+
+  static toClassStudentDTO(entity: ClassStudent): ClassStudentResponseDTO {
+    if (entity === null) {
+      return null;
+    }
+    const { id, _class, student, fee, createdAt, updatedAt } = entity;
+    return {
+      id,
+      _class,
+      student,
+      fee,
+      createdAt,
+      updatedAt,
+    };
+  }
+}
