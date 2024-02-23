@@ -1,4 +1,4 @@
-import { UserMap } from 'src/user/user.datamapper';
+import { StudentMap } from 'src/student/student.datamapper';
 import { StudentPaymentBalance } from './student_payment_balance.entity';
 import { StudentPaymentBalanceModel } from './student_payment_balance.model';
 import { StudentPaymentBalanceResponseDTO } from './dtos/student_payment_balance.dto';
@@ -12,7 +12,7 @@ export class StudentPaymentBalanceMap {
 
     let studentData = null;
     if (student) {
-      studentData = UserMap.toDomain(student);
+      studentData = StudentMap.toDomain(student);
     }
     const projectedProps = {
       id,

@@ -1,9 +1,9 @@
-import { UserResponseDTO } from './dtos/user.dto';
-import { User } from './user.entity';
-import { UserModel } from './user.model';
+import { StudentResponseDTO } from './dtos/student.dto';
+import { Student } from './student.entity';
+import { StudentModel } from './student.model';
 
-export class UserMap {
-  static toDomain(model: UserModel): User {
+export class StudentMap {
+  static toDomain(model: StudentModel): Student {
     if (!model) {
       return null;
     }
@@ -18,10 +18,10 @@ export class UserMap {
       createdAt,
       updatedAt,
     };
-    return User.create(projectedProps);
+    return Student.create(projectedProps);
   }
 
-  static toPersistence(entity: User): UserModel {
+  static toPersistence(entity: Student): StudentModel {
     const { name, email, phone, address, familyId } = entity.props;
     const raw = {
       name,
@@ -30,10 +30,10 @@ export class UserMap {
       address,
       familyId,
     };
-    return raw as UserModel;
+    return raw as StudentModel;
   }
 
-  static toUserDTO(entity: User): UserResponseDTO {
+  static toStudentDTO(entity: Student): StudentResponseDTO {
     if (entity === null) {
       return null;
     }

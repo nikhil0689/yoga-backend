@@ -1,17 +1,17 @@
-import { UserMap } from 'src/user/user.datamapper';
-import { UserFamilyResponseDTO } from './dtos/user_family.dto';
-import { UserFamily } from './user_family.entity';
-import { UserFamilyModel } from './user_family.model';
+import { StudentMap } from 'src/student/student.datamapper';
+import { StudentFamilyResponseDTO } from './dtos/student_family.dto';
+import { StudentFamily } from './student_family.entity';
+import { StudentFamilyModel } from './student_family.model';
 
-export class UserFamilyMap {
-  static toDomain(model: UserFamilyModel): UserFamily {
+export class StudentFamilyMap {
+  static toDomain(model: StudentFamilyModel): StudentFamily {
     if (!model) {
       return null;
     }
     const { id, familyName, ownerId, owner, createdAt, updatedAt } = model;
     let ownerDetails = null;
     if (owner) {
-      ownerDetails = UserMap.toDomain(owner);
+      ownerDetails = StudentMap.toDomain(owner);
     }
     const projectedProps = {
       id,
@@ -21,19 +21,19 @@ export class UserFamilyMap {
       createdAt,
       updatedAt,
     };
-    return UserFamily.create(projectedProps);
+    return StudentFamily.create(projectedProps);
   }
 
-  static toPersistence(entity: UserFamily): UserFamilyModel {
+  static toPersistence(entity: StudentFamily): StudentFamilyModel {
     const { familyName, ownerId } = entity.props;
     const raw = {
       familyName,
       ownerId,
     };
-    return raw as UserFamilyModel;
+    return raw as StudentFamilyModel;
   }
 
-  static toUserFamilyDTO(entity: UserFamily): UserFamilyResponseDTO {
+  static toStudentFamilyDTO(entity: StudentFamily): StudentFamilyResponseDTO {
     if (entity === null) {
       return null;
     }

@@ -8,12 +8,12 @@ import {
 } from 'sequelize-typescript';
 import { ClassModel } from 'src/class/class.model';
 import { ClassStudentModel } from 'src/class_student/class_student.model';
-import { UserFamilyModel } from 'src/user_family/user_family.model';
+import { StudentFamilyModel } from 'src/student_family/student_family.model';
 
 @Table({
-  tableName: 'user',
+  tableName: 'student',
 })
-export class UserModel extends Model<UserModel> {
+export class StudentModel extends Model<StudentModel> {
   @Column({
     primaryKey: true,
     autoIncrement: true,
@@ -53,7 +53,7 @@ export class UserModel extends Model<UserModel> {
   @Column({
     field: 'family_id',
   })
-  @ForeignKey(() => UserFamilyModel)
+  @ForeignKey(() => StudentFamilyModel)
   familyId?: number;
 
   @Column({

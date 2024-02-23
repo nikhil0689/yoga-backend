@@ -1,5 +1,5 @@
 import { StudentFeeProps } from 'src/class_student/class_student.entity';
-import { User } from 'src/user/user.entity';
+import { Student } from 'src/student/student.entity';
 import { Class } from '../class.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -47,7 +47,7 @@ export class ClassStudentResponseDTO {
   readonly id: number;
 
   @ApiProperty()
-  readonly student: User;
+  readonly student: Student;
 
   @ApiProperty()
   readonly _class: Class;

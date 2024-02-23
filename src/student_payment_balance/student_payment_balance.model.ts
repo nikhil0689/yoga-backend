@@ -6,7 +6,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { UserModel } from 'src/user/user.model';
+import { StudentModel } from 'src/student/student.model';
 
 @Table({
   tableName: 'student_payment_balance',
@@ -27,11 +27,11 @@ export class StudentPaymentBalanceModel extends Model<StudentPaymentBalanceModel
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })
-  @ForeignKey(() => UserModel)
+  @ForeignKey(() => StudentModel)
   studentId: number;
 
-  @BelongsTo(() => UserModel)
-  student: UserModel;
+  @BelongsTo(() => StudentModel)
+  student: StudentModel;
 
   @Column({
     allowNull: false,

@@ -7,7 +7,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { ClassStudentModel } from 'src/class_student/class_student.model';
-import { UserModel } from 'src/user/user.model';
+import { StudentModel } from 'src/student/student.model';
 
 @Table({
   tableName: 'class',
@@ -46,11 +46,11 @@ export class ClassModel extends Model<ClassModel> {
   })
   updatedAt: Date;
 
-  // Show.belongsToMany(User, { as: 'bands', through: ShowBand, foreignKey: { name: 'id_show', allowNull: false } });
+  // Show.belongsToMany(Student, { as: 'bands', through: ShowBand, foreignKey: { name: 'id_show', allowNull: false } });
 
   @BelongsToMany(
-    () => UserModel, // Target model we are trying to fetch (through the join table)
+    () => StudentModel, // Target model we are trying to fetch (through the join table)
     () => ClassStudentModel, // "through" (join) table model
   )
-  students: UserModel[];
+  students: StudentModel[];
 }

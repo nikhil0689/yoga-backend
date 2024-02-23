@@ -1,7 +1,7 @@
 import { ClassMap } from 'src/class/class.datamapper';
 import { ClassStudent } from './class_student.entity';
 import { ClassStudentModel } from './class_student.model';
-import { UserMap } from 'src/user/user.datamapper';
+import { StudentMap } from 'src/student/student.datamapper';
 import { ClassStudentResponseDTO } from 'src/class/dtos/class.dto';
 
 export class ClassStudentMap {
@@ -26,7 +26,7 @@ export class ClassStudentMap {
     }
     let studentData = null;
     if (student) {
-      studentData = UserMap.toDomain(student);
+      studentData = StudentMap.toDomain(student);
     }
     const projectedProps = {
       id,

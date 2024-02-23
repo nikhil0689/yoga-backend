@@ -1,6 +1,6 @@
 import { Entity, proxyEntity } from 'entity';
 import { StudentFeeProps } from 'src/class_student/class_student.entity';
-import { User } from 'src/user/user.entity';
+import { Student } from 'src/student/student.entity';
 
 export interface ClassProps {
   readonly date: string;

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { StudentPaymentBalanceModel } from './student_payment_balance.model';
 import { StudentPaymentBalance } from './student_payment_balance.entity';
 import { StudentPaymentBalanceMap } from './student_payment_balance.datamapper';
-import { UserModel } from 'src/user/user.model';
+import { StudentModel } from 'src/student/student.model';
 
 @Injectable()
 export class StudentPaymentBalanceRepository {
@@ -40,7 +40,7 @@ export class StudentPaymentBalanceRepository {
     const instances = await this.studentPaymentBalanceModel.findAll({
       include: [
         {
-          model: UserModel,
+          model: StudentModel,
           as: 'student',
         },
       ],

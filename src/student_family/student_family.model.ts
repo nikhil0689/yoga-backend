@@ -6,12 +6,12 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { UserModel } from 'src/user/user.model';
+import { StudentModel } from 'src/student/student.model';
 
 @Table({
   tableName: 'family',
 })
-export class UserFamilyModel extends Model<UserFamilyModel> {
+export class StudentFamilyModel extends Model<StudentFamilyModel> {
   @Column({
     primaryKey: true,
     autoIncrement: true,
@@ -32,11 +32,11 @@ export class UserFamilyModel extends Model<UserFamilyModel> {
     allowNull: false,
     field: 'owner_id',
   })
-  @ForeignKey(() => UserModel)
+  @ForeignKey(() => StudentModel)
   ownerId: number;
 
-  @BelongsTo(() => UserModel)
-  owner: UserModel;
+  @BelongsTo(() => StudentModel)
+  owner: StudentModel;
 
   @Column({
     allowNull: false,

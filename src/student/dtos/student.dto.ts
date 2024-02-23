@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UserResponseDTO {
+export class StudentResponseDTO {
   @ApiProperty()
   readonly id: number;
 
@@ -26,7 +26,7 @@ export class UserResponseDTO {
   readonly updatedAt: Date;
 }
 
-export class UserCreateDTO {
+export class StudentCreateDTO {
   @ApiProperty()
   readonly name: string;
 
@@ -43,7 +43,7 @@ export class UserCreateDTO {
   readonly family?: string;
 }
 
-export class UserUpdateDTO {
+export class StudentUpdateDTO {
   @ApiProperty()
   readonly name?: string;
 
@@ -57,7 +57,7 @@ export class UserUpdateDTO {
   readonly address?: string;
 }
 
-export class GetUserDTO {
+export class GetStudentDTO {
   @ApiProperty()
   readonly onlyOwners?: boolean;
 }

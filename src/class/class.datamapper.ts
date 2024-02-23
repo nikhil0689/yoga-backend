@@ -1,4 +1,3 @@
-import { UserMap } from 'src/user/user.datamapper';
 import { Class } from './class.entity';
 import { ClassModel } from './class.model';
 import { ClassResponseDTO } from './dtos/class.dto';

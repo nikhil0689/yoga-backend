@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { ClassStudentModel } from './class_student.model';
 import { ClassStudent } from './class_student.entity';
 import { ClassStudentMap } from './class_student.datamapper';
-import { UserModel } from 'src/user/user.model';
+import { StudentModel } from 'src/student/student.model';
 import { ClassModel } from 'src/class/class.model';
 import { Sequelize, where } from 'sequelize';
 
@@ -40,7 +40,7 @@ export class ClassStudentRepository {
           as: '_class',
         },
         {
-          model: UserModel,
+          model: StudentModel,
           as: 'student',
         },
       ],
@@ -56,7 +56,7 @@ export class ClassStudentRepository {
           as: '_class',
         },
         {
-          model: UserModel,
+          model: StudentModel,
           as: 'student',
         },
       ],

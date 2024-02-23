@@ -1,12 +1,12 @@
 import { Entity, proxyEntity } from 'entity';
 import { Class } from 'src/class/class.entity';
-import { User } from 'src/user/user.entity';
+import { Student } from 'src/student/student.entity';
 
 export interface ClassStudentProps {
   readonly classId: number;
   readonly _class?: Class;
   readonly studentId: number;
-  readonly student?: User;
+  readonly student?: Student;
   readonly fee: number;
 }
 

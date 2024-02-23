@@ -7,7 +7,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { ClassModel } from 'src/class/class.model';
-import { UserModel } from 'src/user/user.model';
+import { StudentModel } from 'src/student/student.model';
 
 @Table({
   tableName: 'class_student',
@@ -37,11 +37,11 @@ export class ClassStudentModel extends Model<ClassStudentModel> {
     allowNull: false,
     field: 'student_id',
   })
-  @ForeignKey(() => UserModel)
+  @ForeignKey(() => StudentModel)
   studentId: number;
 
-  @BelongsTo(() => UserModel)
-  student: UserModel;
+  @BelongsTo(() => StudentModel)
+  student: StudentModel;
 
   @Column({
     defaultValue: 0,

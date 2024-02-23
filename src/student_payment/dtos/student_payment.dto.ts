@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/user/user.entity';
+import { Student } from 'src/student/student.entity';
 
 export class StudentPaymentResponseDTO {
   @ApiProperty()
   readonly id: number;
 
   @ApiProperty()
-  readonly student: User;
+  readonly student: Student;
 
   @ApiProperty()
   readonly payment: number;

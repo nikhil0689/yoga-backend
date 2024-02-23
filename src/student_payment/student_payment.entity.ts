@@ -1,9 +1,9 @@
 import { Entity, proxyEntity } from 'entity';
-import { User } from 'src/user/user.entity';
+import { Student } from 'src/student/student.entity';
 
 export interface StudentPaymentProps {
   readonly studentId: number;
-  readonly student?: User;
+  readonly student?: Student;
   readonly payment: number;
   readonly date: string;
   readonly createdAt?: Date;

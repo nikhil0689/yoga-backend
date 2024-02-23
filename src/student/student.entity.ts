@@ -1,6 +1,6 @@
 import { Entity, proxyEntity } from 'entity';
 
-export interface UserProps {
+export interface StudentProps {
   readonly name: string;
   readonly phone?: string;
   readonly email?: string;
@@ -10,7 +10,7 @@ export interface UserProps {
   readonly updatedAt?: Date;
 }
 
-export interface CreateUserProps {
+export interface CreateStudentProps {
   readonly name: string;
   readonly phone?: string;
   readonly email?: string;
@@ -18,7 +18,7 @@ export interface CreateUserProps {
   readonly family?: string;
 }
 
-export interface UpdateUserProps {
+export interface UpdateStudentProps {
   readonly name?: string;
   readonly phone?: string;
   readonly email?: string;
@@ -26,11 +26,11 @@ export interface UpdateUserProps {
   readonly familyId?: number;
 }
 
-export class User extends Entity<UserProps> {
-  private constructor(props: UserProps) {
+export class Student extends Entity<StudentProps> {
+  private constructor(props: StudentProps) {
     super(props);
   }
-  static create(props: UserProps): User {
-    return proxyEntity(new User(props));
+  static create(props: StudentProps): Student {
+    return proxyEntity(new Student(props));
   }
 }
