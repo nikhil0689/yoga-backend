@@ -5,7 +5,7 @@ import { ClassStudent } from './class_student.entity';
 import { ClassStudentMap } from './class_student.datamapper';
 import { StudentModel } from 'src/student/student.model';
 import { ClassModel } from 'src/class/class.model';
-import { Sequelize, where } from 'sequelize';
+import { Op, Sequelize, where } from 'sequelize';
 
 @Injectable()
 export class ClassStudentRepository {
@@ -14,6 +14,10 @@ export class ClassStudentRepository {
     private classStudentModel: typeof ClassStudentModel,
   ) {}
 
+  /**
+   * Create Class student relationship
+   * @param classStudents[]
+   */
   async createClassStudentRecords(
     classStudents: ClassStudent[],
   ): Promise<void> {
@@ -21,6 +25,10 @@ export class ClassStudentRepository {
     await this.classStudentModel.bulkCreate(rawData);
   }
 
+  /**
+   * Delete class student relationship by class id
+   * @param id
+   */
   async deleteByClassId(id: number): Promise<void> {
     await this.classStudentModel.destroy({
       where: {
@@ -29,6 +37,11 @@ export class ClassStudentRepository {
     });
   }
 
+  /**
+   * Get class student records.
+   * @param id
+   * @returns An array of class students.
+   */
   async getClassStudentRecordsById(id: number): Promise<ClassStudent[]> {
     const instances = await this.classStudentModel.findAll({
       where: {
@@ -48,6 +61,10 @@ export class ClassStudentRepository {
     return instances.map((e) => ClassStudentMap.toDomain(e));
   }
 
+  /**
+   * Get class student records.
+   * @returns Class student relationship records
+   */
   async getClassStudentRecords(): Promise<ClassStudent[]> {
     const instances = await this.classStudentModel.findAll({
       include: [
@@ -62,9 +79,5 @@ export class ClassStudentRepository {
       ],
     });
     return instances.map((e) => ClassStudentMap.toDomain(e));
-  }
-
-  async getTotalFeeForStudentById(studentId: number): Promise<number> {
-    return await this.classStudentModel.sum('fee', { where: { studentId } });
   }
 }

@@ -5,13 +5,15 @@ import { ClassRepository } from './class.repository';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ClassModel } from './class.model';
 import { ClassStudentModule } from 'src/class_student/class_student.module';
-import { StudentPaymentBalanceModule } from 'src/student_payment_balance/student_payment_balance.module';
+import { StudentModule } from 'src/student/student.module';
+import { StudentFamilyModule } from 'src/student_family/student_family.module';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([ClassModel]),
     ClassStudentModule,
-    StudentPaymentBalanceModule,
+    StudentModule,
+    StudentFamilyModule,
   ],
   controllers: [ClassController],
   providers: [ClassService, ClassRepository],

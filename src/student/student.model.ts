@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   BelongsToMany,
   Column,
   DataType,
@@ -55,6 +56,9 @@ export class StudentModel extends Model<StudentModel> {
   })
   @ForeignKey(() => StudentFamilyModel)
   familyId?: number;
+
+  @BelongsTo(() => StudentFamilyModel)
+  family: StudentFamilyModel;
 
   @Column({
     allowNull: false,

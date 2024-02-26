@@ -12,6 +12,11 @@ export class StudentPaymentRepository {
     private studentPaymentModel: typeof StudentPaymentModel,
   ) {}
 
+  /**
+   * Add a student payment
+   * @param studentPayment
+   * @returns Student payment details
+   */
   async addStudentPayment(
     studentPayment: StudentPayment,
   ): Promise<StudentPayment> {
@@ -20,6 +25,11 @@ export class StudentPaymentRepository {
     return StudentPaymentMap.toDomain(instance);
   }
 
+  /**
+   * Update student payment by payment id
+   * @param id
+   * @param updatedStudentPayment
+   */
   async updateStudentPaymentById(
     id: number,
     updatedStudentPayment: StudentPayment,
@@ -28,6 +38,11 @@ export class StudentPaymentRepository {
     await this.studentPaymentModel.update(raw, { where: { id } });
   }
 
+  /**
+   * Get student payment by payment id
+   * @param id
+   * @returns Student's payment
+   */
   async getStudentPaymentById(id: number): Promise<StudentPayment> {
     const instance = await this.studentPaymentModel.findOne({
       include: [
@@ -43,6 +58,10 @@ export class StudentPaymentRepository {
     return StudentPaymentMap.toDomain(instance);
   }
 
+  /**
+   * Get all students payments
+   * @returns Students payments
+   */
   async getStudentPayments(): Promise<StudentPayment[]> {
     const instances = await this.studentPaymentModel.findAll({
       include: [
@@ -55,6 +74,10 @@ export class StudentPaymentRepository {
     return instances.map((e) => StudentPaymentMap.toDomain(e));
   }
 
+  /**
+   * Delete student payment by id
+   * @param id
+   */
   async deleteStudentPaymentById(id: number) {
     await this.studentPaymentModel.destroy({
       where: {

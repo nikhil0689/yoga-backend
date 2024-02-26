@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { StudentFamilyService } from './student_family.service';
 import { StudentFamilyResponseDTO } from './dtos/student_family.dto';
 import { StudentFamilyMap } from './student_family.datamapper';
@@ -11,8 +11,8 @@ export class StudentFamilyController {
 
   @YogaApi({
     tag: API_TAG_FAMILY,
-    summary: 'Get families',
-    description: 'Get all families',
+    summary: 'Get all family members along with their balance',
+    description: 'Get all family members',
     apiId: 'yoga-7',
   })
   @Get()

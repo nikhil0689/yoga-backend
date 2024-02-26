@@ -4,12 +4,14 @@ import { StudentPaymentService } from './student_payment.service';
 import { StudentPaymentRepository } from './student_payment.repository';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { StudentPaymentModel } from './student_payment.model';
-import { StudentPaymentBalanceModule } from 'src/student_payment_balance/student_payment_balance.module';
+import { StudentModule } from 'src/student/student.module';
+import { StudentFamilyModule } from 'src/student_family/student_family.module';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([StudentPaymentModel]),
-    StudentPaymentBalanceModule,
+    StudentModule,
+    StudentFamilyModule,
   ],
   controllers: [StudentPaymentController],
   providers: [StudentPaymentService, StudentPaymentRepository],

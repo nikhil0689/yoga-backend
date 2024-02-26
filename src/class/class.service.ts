@@ -3,16 +3,24 @@ import { Class, CreateClassProps, UpdateClassProps } from './class.entity';
 import { ClassRepository } from './class.repository';
 import { ClassStudent } from 'src/class_student/class_student.entity';
 import { ClassStudentService } from 'src/class_student/class_student.service';
-import { StudentPaymentBalanceService } from 'src/student_payment_balance/student_payment_balance.service';
+import { StudentService } from 'src/student/student.service';
+import { StudentFamilyService } from 'src/student_family/student_family.service';
+import { StudentFamily } from 'src/student_family/student_family.entity';
 
 @Injectable()
 export class ClassService {
   constructor(
     private readonly classRepo: ClassRepository,
     private readonly classStudentService: ClassStudentService,
-    private readonly studentPaymentBalanceService: StudentPaymentBalanceService,
+    private readonly studentService: StudentService,
+    private readonly studentFamilyService: StudentFamilyService,
   ) {}
 
+  /**
+   * Get class by classId
+   * @param id
+   * @returns Class
+   */
   async getClassById(id: number): Promise<Class> {
     const classDetails = await this.classRepo.getClassById(id);
     if (!classDetails) {
@@ -21,25 +29,53 @@ export class ClassService {
     return classDetails;
   }
 
+  /**
+   * Get Class Student relationship records
+   * @param id classId
+   * @returns
+   */
   async getClassStudentRecordsByClassId(id: number): Promise<ClassStudent[]> {
+    // verify if class id exists.
     await this.getClassById(id);
+
+    // Get class student details for the class id.
     const classStudentDetails =
       await this.classStudentService.getClassStudentRecordsById(id);
+
     return classStudentDetails;
   }
 
+  /**
+   * Get all class student records
+   * @returns Class student records
+   */
   async getClassStudentRecords(): Promise<ClassStudent[]> {
     return await this.classStudentService.getClassStudentRecords();
   }
 
+  /**
+   * Create a Class
+   * Update Student class relationship
+   * Update student fee in the family table
+   * @param createClassProps
+   * @returns
+   */
   async createClass(createClassProps: CreateClassProps): Promise<Class> {
     const { date, time, studentFee } = createClassProps;
+
     if (!studentFee || studentFee.length === 0) {
       throw new HttpException(
         'Student details are required',
         HttpStatus.BAD_REQUEST,
       );
     }
+
+    // Verify if student exists
+    for (let data of studentFee) {
+      await this.studentService.verifyStudentId(data.studentId);
+    }
+
+    // Create a class
     const _class = Class.create({
       date,
       time,
@@ -54,30 +90,90 @@ export class ClassService {
       }),
     );
 
+    // For each student create class student records.
     await this.classStudentService.createClassStudentRecords(classStudents);
 
-    // update student balance table
-    await this.studentPaymentBalance(classStudents);
+    // For each student update their balance in the family table.
+    for (let data of studentFee) {
+      const { family } = await this.studentService.getStudentById(
+        data.studentId,
+      );
+      const fee = data.fee;
+      // Add current balance with the new fee for the class.
+      const newBalance = family.props.balance + fee;
+
+      // Update the family object
+      const updatedStudentFamily: StudentFamily = family.patch({
+        balance: newBalance,
+      });
+
+      await this.studentFamilyService.updateFamily(
+        family.id,
+        updatedStudentFamily,
+      );
+    }
 
     return classCreated;
   }
 
+  /**
+   * Update a class
+   * @param id classId
+   * @param updateClassProps
+   * @returns Class
+   */
   async updateClass(id, updateClassProps: UpdateClassProps): Promise<Class> {
     const _class = await this.getClassById(id);
     const { date, time, studentFee } = updateClassProps;
 
+    // If date or time is present in the input, then update the class object.
     if (date || time) {
       const updateClassEntity = _class.patch({
         date,
         time,
       });
 
+      // Update the class by id
       await this.classRepo.updateClassById(id, updateClassEntity);
     }
 
+    // If student fee details are present, then update them accordingly.
     if (studentFee && studentFee.length > 0) {
+      // Verify if student exists
+      for (let data of studentFee) {
+        await this.studentService.verifyStudentId(data.studentId);
+      }
+
+      // Get current class student relationships
+      const currentClassStudents =
+        await this.getClassStudentRecordsByClassId(id);
+
+      // For each of the record, update the balance in the family table to the previous state.
+      for (let data of currentClassStudents) {
+        // Get family details of the student.
+        const { family } = await this.studentService.getStudentById(
+          data.studentId,
+        );
+        const fee = data.fee;
+
+        // Subtract the fee from the  current balance;
+        const newBalance = family.props.balance - fee;
+
+        // Update the family object
+        const updatedStudentFamily: StudentFamily = family.patch({
+          balance: newBalance,
+        });
+
+        await this.studentFamilyService.updateFamily(
+          family.id,
+          updatedStudentFamily,
+        );
+      }
+
+      // Delete class student relationship
       await this.classStudentService.deleteByClassId(_class.id);
 
+      // Create new class student relationship based on the update props.
       const classStudents = studentFee.map((e) =>
         ClassStudent.create({
           classId: _class.id,
@@ -88,59 +184,62 @@ export class ClassService {
 
       await this.classStudentService.createClassStudentRecords(classStudents);
 
-      // update student balance table
-      await this.studentPaymentBalance(classStudents);
+      // For each student update their balance in the family table.
+      for (let data of studentFee) {
+        const { family } = await this.studentService.getStudentById(
+          data.studentId,
+        );
+        const fee = data.fee;
+        // Add current balance with the new fee for the class.
+        const newBalance = family.props.balance + fee;
+
+        // Update the family object
+        const updatedStudentFamily: StudentFamily = family.patch({
+          balance: newBalance,
+        });
+
+        await this.studentFamilyService.updateFamily(
+          family.id,
+          updatedStudentFamily,
+        );
+      }
     }
 
     return _class;
   }
 
-  private async studentPaymentBalance(classStudents: ClassStudent[]) {
-    classStudents.forEach(async (e) => {
-      // Get total fee from class student table for a student
-      const totalFee = await this.classStudentService.getTotalFeeForStudentById(
-        e.studentId,
-      );
-
-      const studentPaymentBalance =
-        await this.studentPaymentBalanceService.getStudentPaymentBalanceByStudentId(
-          e.studentId,
-        );
-
-      const newStudentPaymentBalance = studentPaymentBalance.patch({
-        balance: totalFee,
-      });
-
-      await this.studentPaymentBalanceService.updateStudentPaymentBalance(
-        e.studentId,
-        newStudentPaymentBalance,
-      );
-    });
-  }
-
+  /**
+   * Delete a class by id
+   * delete student class relationship
+   * update family balance
+   * @param id
+   */
   async deleteClassById(id: number): Promise<void> {
     const classStudents = await this.getClassStudentRecordsByClassId(id);
-    classStudents.forEach(async (e) => {
-      // Get current balance
-      const studentPaymentBalance =
-        await this.studentPaymentBalanceService.getStudentPaymentBalanceByStudentId(
-          e.studentId,
-        );
 
-      //Calculate new balance
-      const newBalance = studentPaymentBalance.props.balance - e.props.fee;
+    // For each of the record, update the balance in the family table to the previous state.
+    for (let data of classStudents) {
+      // Get family details of the student.
+      const { family } = await this.studentService.getStudentById(
+        data.studentId,
+      );
+      const fee = data.fee;
 
-      const newStudentPaymentBalance = studentPaymentBalance.patch({
+      // Subtract the fee from the  current balance;
+      const newBalance = family.props.balance - fee;
+
+      // Update the family object
+      const updatedStudentFamily: StudentFamily = family.patch({
         balance: newBalance,
       });
 
-      // Update the new balance for student
-      await this.studentPaymentBalanceService.updateStudentPaymentBalance(
-        e.studentId,
-        newStudentPaymentBalance,
+      await this.studentFamilyService.updateFamily(
+        family.id,
+        updatedStudentFamily,
       );
-    });
+    }
 
+    // Delete class record.
     await this.classRepo.deleteClassById(id);
   }
 }

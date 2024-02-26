@@ -1,58 +1,59 @@
 import { ApiProperty } from '@nestjs/swagger';
-
-export class StudentResponseDTO {
-  @ApiProperty()
-  readonly id: number;
-
-  @ApiProperty()
-  readonly name: string;
-
-  @ApiProperty()
-  readonly phone: string;
-
-  @ApiProperty()
-  readonly email: string;
-
-  @ApiProperty()
-  readonly address: string;
-
-  @ApiProperty()
-  readonly isOwner: boolean;
-
-  @ApiProperty()
-  readonly createdAt: Date;
-
-  @ApiProperty()
-  readonly updatedAt: Date;
-}
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 
 export class StudentCreateDTO {
+  @IsNotEmpty()
+  @IsString()
   @ApiProperty()
   readonly name: string;
 
+  @IsString()
+  @IsOptional()
+  @IsPhoneNumber('US')
   @ApiProperty()
   readonly phone?: string;
 
+  @IsOptional()
+  @IsEmail()
   @ApiProperty()
   readonly email?: string;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty()
   readonly address?: string;
 
+  @IsNumber()
+  @IsOptional()
   @ApiProperty()
-  readonly family?: string;
+  readonly familyId?: number;
 }
 
 export class StudentUpdateDTO {
+  @IsOptional()
+  @IsString()
   @ApiProperty()
   readonly name?: string;
 
+  @IsOptional()
+  @IsString()
   @ApiProperty()
   readonly phone?: string;
 
+  @IsOptional()
+  @IsEmail()
   @ApiProperty()
   readonly email?: string;
 
+  @IsOptional()
+  @IsString()
   @ApiProperty()
   readonly address?: string;
 }

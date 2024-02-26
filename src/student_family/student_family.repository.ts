@@ -12,15 +12,24 @@ export class StudentFamilyRepository {
     private studentFamilyModel: typeof StudentFamilyModel,
   ) {}
 
-  async getStudentFamilyByName(familyName: string): Promise<StudentFamily> {
+  /**
+   * Get student's family by family id
+   * @param id
+   * @returns StudentFamily
+   */
+  async getStudentFamilyById(id: number): Promise<StudentFamily> {
     const instance = await this.studentFamilyModel.findOne({
       where: {
-        familyName,
+        id,
       },
     });
     return StudentFamilyMap.toDomain(instance);
   }
 
+  /**
+   * Get all student families.
+   * @returns Student family
+   */
   async getFamilies(): Promise<StudentFamily[]> {
     const instances = await this.studentFamilyModel.findAll({
       include: [{ model: StudentModel, as: 'owner' }],
@@ -28,9 +37,26 @@ export class StudentFamilyRepository {
     return instances.map((e) => StudentFamilyMap.toDomain(e));
   }
 
+  /**
+   * Create a student family
+   * @param family
+   * @returns StudentFamily
+   */
   async createFamily(family: StudentFamily): Promise<StudentFamily> {
     const raw = StudentFamilyMap.toPersistence(family);
     const instance = await this.studentFamilyModel.create(raw);
     return StudentFamilyMap.toDomain(instance);
+  }
+
+  /**
+   * Update family data with the new balance.
+   * @param id
+   * @param studentFamily
+   */
+  async updateFamily(id: number, family: StudentFamily): Promise<void> {
+    const raw = StudentFamilyMap.toPersistence(family);
+    await this.studentFamilyModel.update(raw, {
+      where: { id },
+    });
   }
 }

@@ -8,7 +8,8 @@ export class StudentFamilyMap {
     if (!model) {
       return null;
     }
-    const { id, familyName, ownerId, owner, createdAt, updatedAt } = model;
+    const { id, familyName, ownerId, owner, balance, createdAt, updatedAt } =
+      model;
     let ownerDetails = null;
     if (owner) {
       ownerDetails = StudentMap.toDomain(owner);
@@ -18,6 +19,7 @@ export class StudentFamilyMap {
       familyName,
       ownerId,
       owner: ownerDetails,
+      balance,
       createdAt,
       updatedAt,
     };
@@ -25,10 +27,11 @@ export class StudentFamilyMap {
   }
 
   static toPersistence(entity: StudentFamily): StudentFamilyModel {
-    const { familyName, ownerId } = entity.props;
+    const { familyName, ownerId, balance } = entity.props;
     const raw = {
       familyName,
       ownerId,
+      balance,
     };
     return raw as StudentFamilyModel;
   }
@@ -37,12 +40,14 @@ export class StudentFamilyMap {
     if (entity === null) {
       return null;
     }
-    const { id, familyName, ownerId, owner, createdAt, updatedAt } = entity;
+    const { id, familyName, ownerId, owner, balance, createdAt, updatedAt } =
+      entity;
     return {
       id,
       familyName,
       ownerId,
       owner,
+      balance,
       createdAt,
       updatedAt,
     };

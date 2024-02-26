@@ -5,6 +5,7 @@ export interface StudentFamilyProps {
   readonly familyName: string;
   readonly ownerId: number;
   readonly owner?: Student;
+  readonly balance: number;
 }
 
 export class StudentFamily extends Entity<StudentFamilyProps> {

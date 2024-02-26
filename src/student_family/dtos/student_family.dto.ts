@@ -15,6 +15,9 @@ export class StudentFamilyResponseDTO {
   readonly owner?: Student;
 
   @ApiProperty()
+  readonly balance: number;
+
+  @ApiProperty()
   readonly createdAt: Date;
 
   @ApiProperty()

@@ -40,6 +40,12 @@ export class StudentFamilyModel extends Model<StudentFamilyModel> {
 
   @Column({
     allowNull: false,
+    field: 'balance',
+  })
+  balance: number;
+
+  @Column({
+    allowNull: false,
     field: 'created_at',
   })
   createdAt: Date;

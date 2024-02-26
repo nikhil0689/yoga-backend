@@ -76,8 +76,8 @@ export class StudentPaymentController {
 
   @YogaApi({
     tag: API_TAG_PAYMENT,
-    summary: 'Add a Payment',
-    description: 'Add a Student Payment',
+    summary: 'Update a Payment by payment id',
+    description: 'Update a Student Payment',
     apiId: 'yoga-1',
   })
   @Patch(':id')

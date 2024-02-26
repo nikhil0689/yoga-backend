@@ -1,4 +1,5 @@
 import { Entity, proxyEntity } from 'entity';
+import { StudentFamily } from 'src/student_family/student_family.entity';
 
 export interface StudentProps {
   readonly name: string;
@@ -6,6 +7,7 @@ export interface StudentProps {
   readonly email?: string;
   readonly address?: string;
   readonly familyId?: number;
+  readonly family?: StudentFamily;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }
@@ -15,7 +17,7 @@ export interface CreateStudentProps {
   readonly phone?: string;
   readonly email?: string;
   readonly address?: string;
-  readonly family?: string;
+  readonly familyId?: number;
 }
 
 export interface UpdateStudentProps {

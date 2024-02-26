@@ -7,7 +7,9 @@ import { StudentFamilyModule } from './student_family/student_family.module';
 import { ClassModule } from './class/class.module';
 import { ClassStudentModule } from './class_student/class_student.module';
 import { StudentPaymentModule } from './student_payment/student_payment.module';
-import { StudentPaymentBalanceModule } from './student_payment_balance/student_payment_balance.module';
+import { UserModule } from './user/user.module';
+import { AuthenticationModule } from './authentication/authentication.module';
+import { RefreshTokenTrackerModule } from './refresh-token-tracker/refresh-token-tracker.module';
 
 @Module({
   imports: [
@@ -18,7 +20,9 @@ import { StudentPaymentBalanceModule } from './student_payment_balance/student_p
     ClassModule,
     ClassStudentModule,
     StudentPaymentModule,
-    StudentPaymentBalanceModule,
+    UserModule,
+    AuthenticationModule,
+    RefreshTokenTrackerModule,
   ],
   controllers: [],
   providers: [],

@@ -2,6 +2,15 @@ import { StudentFeeProps } from 'src/class_student/class_student.entity';
 import { Student } from 'src/student/student.entity';
 import { Class } from '../class.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { StudentFeeDTO } from './class_student_fee.dto';
 
 export class ClassResponseDTO {
   @ApiProperty()
@@ -21,25 +30,42 @@ export class ClassResponseDTO {
 }
 
 export class ClassCreateDTO {
+  @IsNotEmpty()
+  @IsDateString()
   @ApiProperty()
   readonly date: string;
 
+  @IsNotEmpty()
+  @IsString()
   @ApiProperty()
   readonly time: string;
 
-  @ApiProperty()
-  readonly studentFee: StudentFeeProps[];
+  @IsArray()
+  @IsNotEmpty()
+  @ApiProperty({
+    isArray: true,
+    type: StudentFeeDTO,
+  })
+  readonly studentFee: StudentFeeDTO[];
 }
 
 export class ClassUpdateDTO {
+  @IsOptional()
+  @IsDateString()
   @ApiProperty()
   readonly date?: string;
 
+  @IsOptional()
+  @IsString()
   @ApiProperty()
   readonly time?: string;
 
-  @ApiProperty()
-  readonly studentFee?: StudentFeeProps[];
+  @IsOptional()
+  @ApiProperty({
+    isArray: true,
+    type: StudentFeeDTO,
+  })
+  readonly studentFee?: StudentFeeDTO[];
 }
 
 export class ClassStudentResponseDTO {

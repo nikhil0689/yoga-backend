@@ -6,25 +6,28 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { StudentMap } from './student.datamapper';
-import {
-  StudentCreateDTO,
-  StudentResponseDTO,
-  StudentUpdateDTO,
-} from './dtos/student.dto';
+import { StudentCreateDTO, StudentUpdateDTO } from './dtos/student.dto';
 import { YogaApi } from 'src/common/openapi/yoga-api.decorator';
 import { API_TAG_STUDENT } from './student.constants';
+import { StudentResponseDTO } from './dtos/student-response.dto';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags(API_TAG_STUDENT)
+@ApiBearerAuth()
+//@UseGuards(JwtAuthGuard)
 @Controller('students')
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
 
   @YogaApi({
     tag: API_TAG_STUDENT,
-    summary: 'Get Student',
-    description: 'Get Student by ID',
+    summary: 'Get Student by Id',
+    description: 'Get Student by Id',
     apiId: 'yoga-1',
   })
   @Get(':id')
@@ -35,7 +38,7 @@ export class StudentController {
 
   @YogaApi({
     tag: API_TAG_STUDENT,
-    summary: 'Get Students',
+    summary: 'Get all Students',
     description: 'Get all Students',
     apiId: 'yoga-2',
   })
@@ -75,14 +78,13 @@ export class StudentController {
 
   @YogaApi({
     tag: API_TAG_STUDENT,
-    summary: 'Delete Student',
+    summary: 'Delete a Student',
     description: 'Delete a Student',
     apiId: 'yoga-5',
   })
   @Delete(':id')
   async deleteStudent(@Param('id') id: number): Promise<boolean> {
-    await this.studentService.deleteStudentById(id);
-    return true;
+    return await this.studentService.deleteStudentById(id);
   }
 
   @YogaApi({

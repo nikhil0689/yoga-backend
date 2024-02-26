@@ -1,19 +1,33 @@
-import { StudentResponseDTO } from './dtos/student.dto';
+import { StudentResponseDTO } from './dtos/student-response.dto';
 import { Student } from './student.entity';
 import { StudentModel } from './student.model';
+import { StudentFamilyMap } from 'src/student_family/student_family.datamapper';
 
 export class StudentMap {
   static toDomain(model: StudentModel): Student {
     if (!model) {
       return null;
     }
-    const { id, name, email, phone, address, createdAt, updatedAt } = model;
+    const {
+      id,
+      name,
+      email,
+      phone,
+      address,
+      familyId,
+      family,
+      createdAt,
+      updatedAt,
+    } = model;
 
+    const familyData = StudentFamilyMap.toDomain(family);
     const projectedProps = {
       id,
       name,
       email,
       phone,
+      familyId,
+      family: familyData,
       address,
       createdAt,
       updatedAt,
@@ -37,8 +51,18 @@ export class StudentMap {
     if (entity === null) {
       return null;
     }
-    const { id, name, email, phone, address, isOwner, createdAt, updatedAt } =
-      entity;
+    const {
+      id,
+      name,
+      email,
+      phone,
+      address,
+      isOwner,
+      familyId,
+      family,
+      createdAt,
+      updatedAt,
+    } = entity;
     return {
       id,
       name,
@@ -46,6 +70,8 @@ export class StudentMap {
       phone,
       address,
       isOwner,
+      familyId,
+      family,
       createdAt,
       updatedAt,
     };
