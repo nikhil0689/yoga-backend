@@ -9,7 +9,7 @@ export class AuthJwtService {
   constructor(private jwtService: JwtService) {}
 
   /**
-   * Generate access token
+   * Generate Access Token
    * @param user
    * @returns Access Token
    */
@@ -30,9 +30,9 @@ export class AuthJwtService {
   }
 
   /**
-   * Generate refresh token
+   * Generate Refresh Token
    * @param user
-   * @returns refresh Token
+   * @returns Refresh Token
    */
   async generateRefreshToken(user: User): Promise<string> {
     const jwtPayload = {

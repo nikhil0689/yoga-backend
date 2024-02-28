@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { configureOpenAPI } from './common/openapi/configure-open-api';
 import { ValidationPipe } from '@nestjs/common';

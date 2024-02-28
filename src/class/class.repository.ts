@@ -11,6 +11,11 @@ export class ClassRepository {
     private classModel: typeof ClassModel,
   ) {}
 
+  /**
+   * Get class by classId
+   * @param id
+   * @returns Class
+   */
   async getClassById(id: number): Promise<Class> {
     const instance = await this.classModel.findOne({
       where: { id },

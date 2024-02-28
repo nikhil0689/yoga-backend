@@ -9,7 +9,7 @@ export class RefreshTokenTrackerService {
   ) {}
 
   /**
-   * Create a new refresh token tracker record
+   * Create a new Refresh Token Tracker Record
    * @param refreshTokenHash
    * @param userId
    */
@@ -27,9 +27,9 @@ export class RefreshTokenTrackerService {
   }
 
   /**
-   * Get refresh token tracker for the user id
+   * Get Refresh Token Tracker for the User Id
    * @param userId
-   * @returns refresh token tracker details
+   * @returns Refresh Token Tracker Details
    */
   async getRefreshTokenHashByUserId(
     userId: string,
@@ -48,7 +48,7 @@ export class RefreshTokenTrackerService {
   }
 
   /**
-   * Delete the refresh token hash for the user id
+   * Delete the Refresh Token Hash for the User Id
    * @param userId
    */
   async deleteRefreshTokenByUserId(userId: string): Promise<void> {

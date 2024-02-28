@@ -1,11 +1,10 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { LoginDTO } from './dtos/authentication.dto';
 import { YogaApi } from 'src/common/openapi/yoga-api.decorator';
 import { API_TAG_AUTHENTICATION } from './authentication.constants';
 import { LocalAuthGuard } from 'src/authentication/guards/local-auth.guard';
 import { RequestUser } from 'src/decorators/request-user.decorator';
-import { User } from 'src/user/user.entity';
 import { RefreshTokenGuard } from 'src/authentication/guards/refresh-token.guard';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
 import { RequestUserId } from 'src/decorators/request-user-id.decorator';
