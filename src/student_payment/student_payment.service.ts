@@ -3,10 +3,12 @@ import { StudentPaymentRepository } from './student_payment.repository';
 import {
   AddStudentPaymentProps,
   StudentPayment,
+  StudentPaymentsWithCount,
   UpdateStudentPaymentProps,
 } from './student_payment.entity';
 import { StudentService } from 'src/student/student.service';
 import { StudentFamilyService } from 'src/student_family/student_family.service';
+import { PaginationParams } from 'src/common/pagination.entity';
 
 @Injectable()
 export class StudentPaymentService {
@@ -121,8 +123,10 @@ export class StudentPaymentService {
    * Get all students payments
    * @returns Students payments
    */
-  async getStudentPayments(): Promise<StudentPayment[]> {
-    return await this.studentPaymentRepo.getStudentPayments();
+  async getStudentPayments(
+    paginationParams: PaginationParams,
+  ): Promise<StudentPaymentsWithCount> {
+    return await this.studentPaymentRepo.getStudentPayments(paginationParams);
   }
 
   /**
@@ -146,5 +150,9 @@ export class StudentPaymentService {
 
     // Delete the student payment record.
     await this.studentPaymentRepo.deleteStudentPaymentById(id);
+  }
+
+  async getStudentPaymentsTotal(): Promise<number> {
+    return await this.studentPaymentRepo.getStudentPaymentsTotal();
   }
 }

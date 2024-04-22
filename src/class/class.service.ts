@@ -1,11 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Class, CreateClassProps, UpdateClassProps } from './class.entity';
+import {
+  Class,
+  ClassStudentProps,
+  ClassStudentPropsWithCount,
+  CreateClassProps,
+  UpdateClassProps,
+} from './class.entity';
 import { ClassRepository } from './class.repository';
 import { ClassStudent } from 'src/class_student/class_student.entity';
 import { ClassStudentService } from 'src/class_student/class_student.service';
 import { StudentService } from 'src/student/student.service';
 import { StudentFamilyService } from 'src/student_family/student_family.service';
 import { StudentFamily } from 'src/student_family/student_family.entity';
+import { PaginationParams } from 'src/common/pagination.entity';
 
 @Injectable()
 export class ClassService {
@@ -30,6 +37,7 @@ export class ClassService {
   }
 
   /**
+   * Only used in the service layer
    * Get Class Student relationship records
    * @param id classId
    * @returns
@@ -46,11 +54,24 @@ export class ClassService {
   }
 
   /**
+   * Used in controller
+   * @param id class id
+   * @returns Classes with student records
+   */
+  async getClassStudentsByClassId(id: number): Promise<ClassStudentProps> {
+    // verify if class id exists.
+    await this.getClassById(id);
+    return await this.classRepo.getClassStudentsById(id);
+  }
+
+  /**
    * Get all class student records
    * @returns Class student records
    */
-  async getClassStudentRecords(): Promise<ClassStudent[]> {
-    return await this.classStudentService.getClassStudentRecords();
+  async getClassStudentRecords(
+    paginationParams: PaginationParams,
+  ): Promise<ClassStudentPropsWithCount> {
+    return await this.classRepo.getClasses(paginationParams);
   }
 
   /**
@@ -71,7 +92,7 @@ export class ClassService {
     }
 
     // Verify if student exists
-    for (let data of studentFee) {
+    for (const data of studentFee) {
       await this.studentService.verifyStudentId(data.studentId);
     }
 
@@ -94,7 +115,7 @@ export class ClassService {
     await this.classStudentService.createClassStudentRecords(classStudents);
 
     // For each student update their balance in the family table.
-    for (let data of studentFee) {
+    for (const data of studentFee) {
       const { family } = await this.studentService.getStudentById(
         data.studentId,
       );
@@ -123,6 +144,7 @@ export class ClassService {
    * @returns Class
    */
   async updateClass(id, updateClassProps: UpdateClassProps): Promise<Class> {
+    console.log('coming inside service: ', id, updateClassProps);
     const _class = await this.getClassById(id);
     const { date, time, studentFee } = updateClassProps;
 
@@ -140,7 +162,7 @@ export class ClassService {
     // If student fee details are present, then update them accordingly.
     if (studentFee && studentFee.length > 0) {
       // Verify if student exists
-      for (let data of studentFee) {
+      for (const data of studentFee) {
         await this.studentService.verifyStudentId(data.studentId);
       }
 
@@ -149,7 +171,7 @@ export class ClassService {
         await this.getClassStudentRecordsByClassId(id);
 
       // For each of the record, update the balance in the family table to the previous state.
-      for (let data of currentClassStudents) {
+      for (const data of currentClassStudents) {
         // Get family details of the student.
         const { family } = await this.studentService.getStudentById(
           data.studentId,
@@ -185,7 +207,7 @@ export class ClassService {
       await this.classStudentService.createClassStudentRecords(classStudents);
 
       // For each student update their balance in the family table.
-      for (let data of studentFee) {
+      for (const data of studentFee) {
         const { family } = await this.studentService.getStudentById(
           data.studentId,
         );
@@ -218,7 +240,7 @@ export class ClassService {
     const classStudents = await this.getClassStudentRecordsByClassId(id);
 
     // For each of the record, update the balance in the family table to the previous state.
-    for (let data of classStudents) {
+    for (const data of classStudents) {
       // Get family details of the student.
       const { family } = await this.studentService.getStudentById(
         data.studentId,
@@ -241,5 +263,9 @@ export class ClassService {
 
     // Delete class record.
     await this.classRepo.deleteClassById(id);
+  }
+
+  async getClassesCount(): Promise<number> {
+    return this.classRepo.getClassesCount();
   }
 }

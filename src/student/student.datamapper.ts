@@ -1,5 +1,8 @@
-import { StudentResponseDTO } from './dtos/student-response.dto';
-import { Student } from './student.entity';
+import {
+  PaginatedStudentResponseDTO,
+  StudentResponseDTO,
+} from './dtos/student-response.dto';
+import { Student, StudentPropsWithCount } from './student.entity';
 import { StudentModel } from './student.model';
 import { StudentFamilyMap } from 'src/student_family/student_family.datamapper';
 
@@ -74,6 +77,22 @@ export class StudentMap {
       family,
       createdAt,
       updatedAt,
+    };
+  }
+
+  static toPaginatedStudentCountDTO(
+    entity: StudentPropsWithCount,
+  ): PaginatedStudentResponseDTO {
+    if (entity === null) {
+      return null;
+    }
+    const { results: data, count } = entity;
+
+    const studentsDto = data.map((e) => this.toStudentDTO(e));
+
+    return {
+      results: studentsDto,
+      count,
     };
   }
 }

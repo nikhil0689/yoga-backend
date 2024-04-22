@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { StudentPayment } from './student_payment.entity';
+import {
+  StudentPayment,
+  StudentPaymentsWithCount,
+} from './student_payment.entity';
 import { StudentPaymentModel } from './student_payment.model';
 import { StudentPaymentMap } from './student_payment.datamapper';
 import { StudentModel } from 'src/student/student.model';
+import { PaginationParams } from 'src/common/pagination.entity';
 
 @Injectable()
 export class StudentPaymentRepository {
@@ -62,8 +66,15 @@ export class StudentPaymentRepository {
    * Get all students payments
    * @returns Students payments
    */
-  async getStudentPayments(): Promise<StudentPayment[]> {
-    const instances = await this.studentPaymentModel.findAll({
+  async getStudentPayments(
+    paginationParams: PaginationParams,
+  ): Promise<StudentPaymentsWithCount> {
+    const { offset, limit } = paginationParams;
+    const payments = await this.studentPaymentModel.findAndCountAll({
+      limit: limit,
+      offset: offset,
+      distinct: true,
+      order: [['id', 'DESC']],
       include: [
         {
           model: StudentModel,
@@ -71,7 +82,17 @@ export class StudentPaymentRepository {
         },
       ],
     });
-    return instances.map((e) => StudentPaymentMap.toDomain(e));
+
+    const paginatedResults = {
+      results: payments.rows.map((e) => StudentPaymentMap.toDomain(e)),
+      count: payments.count,
+    };
+
+    return paginatedResults;
+  }
+
+  async getStudentPaymentsTotal(): Promise<number> {
+    return await this.studentPaymentModel.sum('payment');
   }
 
   /**

@@ -17,5 +17,6 @@ import { StudentFamilyModule } from 'src/student_family/student_family.module';
   ],
   controllers: [ClassController],
   providers: [ClassService, ClassRepository],
+  exports: [ClassService],
 })
 export class ClassModule {}

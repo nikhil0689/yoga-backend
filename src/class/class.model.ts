@@ -46,6 +46,9 @@ export class ClassModel extends Model<ClassModel> {
   })
   updatedAt: Date;
 
+  @HasMany(() => ClassStudentModel, 'classId')
+  classStudents?: ClassStudentModel[];
+
   // Show.belongsToMany(Student, { as: 'bands', through: ShowBand, foreignKey: { name: 'id_show', allowNull: false } });
 
   @BelongsToMany(

@@ -1,8 +1,13 @@
-import { Student } from 'src/student/student.entity';
-import { StudentPayment } from './student_payment.entity';
+import {
+  StudentPayment,
+  StudentPaymentsWithCount,
+} from './student_payment.entity';
 import { StudentPaymentModel } from './student_payment.model';
 import { StudentMap } from 'src/student/student.datamapper';
-import { StudentPaymentResponseDTO } from './dtos/student_payment.dto';
+import {
+  PaginatedStudentPaymentResponseDTO,
+  StudentPaymentResponseDTO,
+} from './dtos/student_payment.dto';
 
 export class StudentPaymentMap {
   static toDomain(model: StudentPaymentModel): StudentPayment {
@@ -53,6 +58,22 @@ export class StudentPaymentMap {
       payment,
       createdAt,
       updatedAt,
+    };
+  }
+
+  static toPaginatedStudentPaymentDTO(
+    entity: StudentPaymentsWithCount,
+  ): PaginatedStudentPaymentResponseDTO {
+    if (entity === null) {
+      return null;
+    }
+    const { results: data, count } = entity;
+
+    const studentsPaymentDto = data.map((e) => this.toStudentPaymentDTO(e));
+
+    return {
+      results: studentsPaymentDto,
+      count,
     };
   }
 }

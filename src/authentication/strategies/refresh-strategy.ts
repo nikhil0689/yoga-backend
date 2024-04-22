@@ -9,14 +9,27 @@ import { Request } from 'express';
 export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   constructor(readonly authService: AuthenticationService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      //jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        RefreshStrategy.extractJWT,
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       secretOrKey: appConfig().refreshSecret,
       passReqToCallback: true,
     });
   }
 
+  private static extractJWT(req: Request): string | null {
+    let token = null;
+    if (req.cookies) {
+      token = req.cookies['jwt'];
+      return token;
+    }
+    return null;
+  }
+
   async validate(req: Request, payload: any): Promise<any> {
-    const refreshToken = req.get('Authorization').replace('Bearer', '').trim();
+    const refreshToken = req.cookies.jwt;
     return {
       ...payload,
       refreshToken,

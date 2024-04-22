@@ -32,3 +32,11 @@ export class StudentResponseDTO {
   @ApiProperty()
   readonly updatedAt: Date;
 }
+
+export class PaginatedStudentResponseDTO {
+  @ApiProperty()
+  readonly results: StudentResponseDTO[];
+
+  @ApiProperty()
+  readonly count: number;
+}

@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
@@ -13,9 +14,16 @@ import { StudentMap } from './student.datamapper';
 import { StudentCreateDTO, StudentUpdateDTO } from './dtos/student.dto';
 import { YogaApi } from 'src/common/openapi/yoga-api.decorator';
 import { API_TAG_STUDENT } from './student.constants';
-import { StudentResponseDTO } from './dtos/student-response.dto';
+import {
+  PaginatedStudentResponseDTO,
+  StudentResponseDTO,
+} from './dtos/student-response.dto';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  PaginationParams,
+  calculateSizeAndOffset,
+} from 'src/common/pagination.entity';
 
 @ApiTags(API_TAG_STUDENT)
 @ApiBearerAuth()
@@ -43,9 +51,16 @@ export class StudentController {
     apiId: 'yoga-2',
   })
   @Get()
-  async getStudents(): Promise<StudentResponseDTO[]> {
-    const students = await this.studentService.getStudents();
-    return students.map((e) => StudentMap.toStudentDTO(e));
+  async getStudents(
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ): Promise<PaginatedStudentResponseDTO> {
+    const paginationParams: PaginationParams = calculateSizeAndOffset(
+      page,
+      size,
+    );
+    const students = await this.studentService.getStudents(paginationParams);
+    return StudentMap.toPaginatedStudentCountDTO(students);
   }
 
   @YogaApi({

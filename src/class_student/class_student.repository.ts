@@ -5,7 +5,6 @@ import { ClassStudent } from './class_student.entity';
 import { ClassStudentMap } from './class_student.datamapper';
 import { StudentModel } from 'src/student/student.model';
 import { ClassModel } from 'src/class/class.model';
-import { Op, Sequelize, where } from 'sequelize';
 
 @Injectable()
 export class ClassStudentRepository {

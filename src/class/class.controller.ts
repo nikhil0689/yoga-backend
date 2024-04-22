@@ -6,6 +6,8 @@ import {
   Param,
   Patch,
   Post,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ClassService } from './class.service';
 import {
@@ -13,27 +15,23 @@ import {
   ClassResponseDTO,
   ClassStudentResponseDTO,
   ClassUpdateDTO,
+  PaginatedClassStudentResponseDTO,
 } from './dtos/class.dto';
 import { ClassMap } from './class.datamapper';
 import { YogaApi } from 'src/common/openapi/yoga-api.decorator';
 import { API_TAG_CLASS } from './class.constants';
-import { ClassStudentMap } from 'src/class_student/class_student.datamapper';
+import {
+  PaginationParams,
+  calculateSizeAndOffset,
+} from 'src/common/pagination.entity';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('classes')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class ClassController {
   constructor(private readonly classService: ClassService) {}
-
-  @YogaApi({
-    tag: API_TAG_CLASS,
-    summary: 'Get Classes',
-    description: 'Get Classes',
-    apiId: 'yoga-8',
-  })
-  @Get()
-  async getClassStudentRecords(): Promise<ClassStudentResponseDTO[]> {
-    const classes = await this.classService.getClassStudentRecords();
-    return classes.map((e) => ClassStudentMap.toClassStudentDTO(e));
-  }
 
   @YogaApi({
     tag: API_TAG_CLASS,
@@ -44,10 +42,30 @@ export class ClassController {
   @Get(':id')
   async getStudentRecordsByClassId(
     @Param('id') id: number,
-  ): Promise<ClassStudentResponseDTO[]> {
+  ): Promise<ClassStudentResponseDTO> {
     const studentRecords =
-      await this.classService.getClassStudentRecordsByClassId(id);
-    return studentRecords.map((e) => ClassStudentMap.toClassStudentDTO(e));
+      await this.classService.getClassStudentsByClassId(id);
+    return studentRecords;
+  }
+
+  @YogaApi({
+    tag: API_TAG_CLASS,
+    summary: 'Get Classes',
+    description: 'Get Classes',
+    apiId: 'yoga-8',
+  })
+  @Get()
+  async getClassStudentRecords(
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ): Promise<PaginatedClassStudentResponseDTO> {
+    const paginationParams: PaginationParams = calculateSizeAndOffset(
+      page,
+      size,
+    );
+    const classes =
+      await this.classService.getClassStudentRecords(paginationParams);
+    return ClassMap.toPaginatedClassStudentCountDTO(classes);
   }
 
   @YogaApi({

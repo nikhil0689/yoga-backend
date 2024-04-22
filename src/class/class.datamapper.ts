@@ -1,6 +1,16 @@
-import { Class } from './class.entity';
+import {
+  Class,
+  ClassStudentProps,
+  ClassStudentPropsWithCount,
+  StudentNameFeeProps,
+} from './class.entity';
 import { ClassModel } from './class.model';
-import { ClassResponseDTO } from './dtos/class.dto';
+import {
+  ClassResponseDTO,
+  ClassStudentResponseDTO,
+  PaginatedClassStudentResponseDTO,
+  StudentFeeResponseDTO,
+} from './dtos/class.dto';
 
 export class ClassMap {
   static toDomain(model: ClassModel): Class {
@@ -17,6 +27,27 @@ export class ClassMap {
       updatedAt,
     };
     return Class.create(projectedProps);
+  }
+
+  static toClassStudentDomain(classes: ClassModel): ClassStudentProps {
+    if (!classes) {
+      return null;
+    }
+
+    const students = classes.classStudents.map((student) => ({
+      studentId: student.studentId,
+      fee: student.fee,
+      studentName: student?.student?.name,
+    }));
+
+    const data: ClassStudentProps = {
+      classId: classes.id,
+      time: classes.time,
+      date: classes.date,
+      students: students,
+    };
+
+    return data;
   }
 
   static toPersistence(entity: Class): ClassModel {
@@ -39,6 +70,54 @@ export class ClassMap {
       time,
       createdAt,
       updatedAt,
+    };
+  }
+
+  static toClassStudentDTO(entity: ClassStudentProps): ClassStudentResponseDTO {
+    if (entity === null) {
+      return null;
+    }
+    const { classId, date, time, students } = entity;
+
+    const studentsDto = students.map((e) => this.toStudentFeeResponseDTO(e));
+
+    return {
+      classId,
+      date,
+      time,
+      students: studentsDto,
+    };
+  }
+
+  static toStudentFeeResponseDTO(
+    student: StudentNameFeeProps,
+  ): StudentFeeResponseDTO {
+    if (student === null) {
+      return null;
+    }
+
+    const { studentId, fee, studentName } = student;
+
+    return {
+      studentId,
+      fee,
+      studentName,
+    };
+  }
+
+  static toPaginatedClassStudentCountDTO(
+    entity: ClassStudentPropsWithCount,
+  ): PaginatedClassStudentResponseDTO {
+    if (entity === null) {
+      return null;
+    }
+    const { results: data, count } = entity;
+
+    const studentsDto = data.map((e) => this.toClassStudentDTO(e));
+
+    return {
+      results: studentsDto,
+      count,
     };
   }
 }

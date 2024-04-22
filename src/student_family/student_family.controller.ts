@@ -1,11 +1,15 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { StudentFamilyService } from './student_family.service';
 import { StudentFamilyResponseDTO } from './dtos/student_family.dto';
 import { StudentFamilyMap } from './student_family.datamapper';
 import { YogaApi } from 'src/common/openapi/yoga-api.decorator';
 import { API_TAG_FAMILY } from './student_family.constants';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
 
 @Controller('families')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class StudentFamilyController {
   constructor(private readonly studentFamilyService: StudentFamilyService) {}
 

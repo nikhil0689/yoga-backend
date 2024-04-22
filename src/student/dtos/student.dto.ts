@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsEmail,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -21,7 +20,6 @@ export class StudentCreateDTO {
   readonly phone?: string;
 
   @IsOptional()
-  @IsEmail()
   @ApiProperty()
   readonly email?: string;
 
@@ -48,7 +46,6 @@ export class StudentUpdateDTO {
   readonly phone?: string;
 
   @IsOptional()
-  @IsEmail()
   @ApiProperty()
   readonly email?: string;
 

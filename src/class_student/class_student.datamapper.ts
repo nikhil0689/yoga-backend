@@ -2,7 +2,6 @@ import { ClassMap } from 'src/class/class.datamapper';
 import { ClassStudent } from './class_student.entity';
 import { ClassStudentModel } from './class_student.model';
 import { StudentMap } from 'src/student/student.datamapper';
-import { ClassStudentResponseDTO } from 'src/class/dtos/class.dto';
 
 export class ClassStudentMap {
   static toDomain(model: ClassStudentModel): ClassStudent {
@@ -51,18 +50,18 @@ export class ClassStudentMap {
     return raw as ClassStudentModel;
   }
 
-  static toClassStudentDTO(entity: ClassStudent): ClassStudentResponseDTO {
-    if (entity === null) {
-      return null;
-    }
-    const { id, _class, student, fee, createdAt, updatedAt } = entity;
-    return {
-      id,
-      _class,
-      student,
-      fee,
-      createdAt,
-      updatedAt,
-    };
-  }
+  // static toClassStudentDTO(entity: ClassStudent): ClassStudentResponseDTO {
+  //   if (entity === null) {
+  //     return null;
+  //   }
+  //   const { id, _class, student, fee, createdAt, updatedAt } = entity;
+  //   return {
+  //     id,
+  //     _class,
+  //     student,
+  //     fee,
+  //     createdAt,
+  //     updatedAt,
+  //   };
+  // }
 }

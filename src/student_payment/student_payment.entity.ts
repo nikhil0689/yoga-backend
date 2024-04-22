@@ -10,6 +10,11 @@ export interface StudentPaymentProps {
   readonly updatedAt?: Date;
 }
 
+export interface StudentPaymentsWithCount {
+  readonly results: StudentPayment[];
+  readonly count: number;
+}
+
 export interface AddStudentPaymentProps {
   readonly studentId: number;
   readonly date: string;

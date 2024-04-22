@@ -50,4 +50,8 @@ export class StudentFamilyService {
   async updateFamily(id: number, studentFamily: StudentFamily): Promise<void> {
     await this.studentFamilyRepo.updateFamily(id, studentFamily);
   }
+
+  async getTotalBalance(): Promise<number> {
+    return await this.studentFamilyRepo.getTotalBalance();
+  }
 }

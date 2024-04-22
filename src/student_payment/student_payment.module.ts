@@ -15,5 +15,6 @@ import { StudentFamilyModule } from 'src/student_family/student_family.module';
   ],
   controllers: [StudentPaymentController],
   providers: [StudentPaymentService, StudentPaymentRepository],
+  exports: [StudentPaymentService],
 })
 export class StudentPaymentModule {}

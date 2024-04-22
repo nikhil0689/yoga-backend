@@ -26,6 +26,10 @@ export class StudentFamilyRepository {
     return StudentFamilyMap.toDomain(instance);
   }
 
+  async getTotalBalance(): Promise<number> {
+    return await this.studentFamilyModel.sum('balance');
+  }
+
   /**
    * Get all student families.
    * @returns Student family

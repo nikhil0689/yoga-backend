@@ -1,3 +1,4 @@
+import { UserResponseDTO } from './dtos/user.response.dto';
 import { User } from './user.entity';
 import { UserModel } from './user.model';
 
@@ -27,5 +28,25 @@ export class UserMap {
       updatedAt,
     };
     return User.create(projectedProps);
+  }
+
+  static toUserResponseDTO(entity: User): UserResponseDTO {
+    if (entity === null) {
+      return null;
+    }
+
+    const { uniqueId, firstName, lastName, email, createdAt, updatedAt } =
+      entity;
+
+    const dto: UserResponseDTO = {
+      uniqueId,
+      firstName,
+      lastName,
+      email,
+      createdAt,
+      updatedAt,
+    };
+
+    return dto;
   }
 }

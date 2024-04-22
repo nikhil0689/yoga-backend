@@ -1,15 +1,5 @@
-import { StudentFeeProps } from 'src/class_student/class_student.entity';
-import { Student } from 'src/student/student.entity';
-import { Class } from '../class.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsDateString,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { StudentFeeDTO } from './class_student_fee.dto';
 
 export class ClassResponseDTO {
@@ -31,7 +21,6 @@ export class ClassResponseDTO {
 
 export class ClassCreateDTO {
   @IsNotEmpty()
-  @IsDateString()
   @ApiProperty()
   readonly date: string;
 
@@ -51,7 +40,6 @@ export class ClassCreateDTO {
 
 export class ClassUpdateDTO {
   @IsOptional()
-  @IsDateString()
   @ApiProperty()
   readonly date?: string;
 
@@ -70,20 +58,33 @@ export class ClassUpdateDTO {
 
 export class ClassStudentResponseDTO {
   @ApiProperty()
-  readonly id: number;
+  readonly classId: number;
 
   @ApiProperty()
-  readonly student: Student;
+  readonly date: string;
 
   @ApiProperty()
-  readonly _class: Class;
+  readonly time: string;
+
+  @ApiProperty()
+  readonly students: StudentFeeResponseDTO[];
+}
+
+export class StudentFeeResponseDTO {
+  @ApiProperty()
+  readonly studentId: number;
 
   @ApiProperty()
   readonly fee: number;
 
   @ApiProperty()
-  readonly createdAt: Date;
+  readonly studentName: string;
+}
+
+export class PaginatedClassStudentResponseDTO {
+  @ApiProperty()
+  readonly results: ClassStudentResponseDTO[];
 
   @ApiProperty()
-  readonly updatedAt: Date;
+  readonly count: number;
 }

@@ -4,7 +4,7 @@ import { AuthJwtService } from './auth-jwt.service';
 import { UserService } from 'src/user/user.service';
 import { hash } from '../utils';
 import { RefreshTokenTrackerService } from 'src/refresh-token-tracker/refresh-token-tracker.service';
-import { User, UserPropsWithoutPassword } from 'src/user/user.entity';
+import { User } from 'src/user/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -83,7 +83,7 @@ export class AuthenticationService {
    * @param pass
    * @returns
    */
-  async validateUser(id: string, password: string): Promise<any> {
+  async validateUser(id: string, password: string): Promise<User> {
     const user = await this.userService.getUserById(id);
 
     if (user.password !== password) {
@@ -91,7 +91,7 @@ export class AuthenticationService {
     }
 
     const { uniqueId, email, firstName, lastName } = user;
-    return { uniqueId, email, firstName, lastName };
+    return User.create({ uniqueId, email, firstName, lastName });
   }
 
   /**

@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsDateString,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { Student } from 'src/student/student.entity';
 
 export class StudentPaymentResponseDTO {
@@ -35,7 +29,6 @@ export class CreatePaymentDTO {
   readonly studentId: number;
 
   @IsNotEmpty()
-  @IsDateString()
   @ApiProperty()
   readonly date: string;
 
@@ -51,7 +44,6 @@ export class UpdateStudentPaymentDTO {
   @ApiProperty()
   readonly studentId?: number;
 
-  @IsDateString()
   @IsOptional()
   @ApiProperty()
   readonly date?: string;
@@ -60,4 +52,12 @@ export class UpdateStudentPaymentDTO {
   @IsOptional()
   @ApiProperty()
   readonly payment?: number;
+}
+
+export class PaginatedStudentPaymentResponseDTO {
+  @ApiProperty()
+  readonly results: StudentPaymentResponseDTO[];
+
+  @ApiProperty()
+  readonly count: number;
 }

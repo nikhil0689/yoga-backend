@@ -4,9 +4,12 @@ import {
   CreateStudentProps,
   UpdateStudentProps,
   Student,
+  StudentPropsWithCount,
 } from './student.entity';
 import { StudentFamilyService } from 'src/student_family/student_family.service';
 import { valueExists } from 'src/utils';
+import { StudentFamily } from 'src/student_family/student_family.entity';
+import { PaginationParams } from 'src/common/pagination.entity';
 
 @Injectable()
 export class StudentService {
@@ -46,8 +49,10 @@ export class StudentService {
    * Get Students
    * @returns Students
    */
-  async getStudents(): Promise<Student[]> {
-    return await this.studentRepo.getStudents();
+  async getStudents(
+    paginationParams: PaginationParams,
+  ): Promise<StudentPropsWithCount> {
+    return await this.studentRepo.getStudents(paginationParams);
   }
 
   /**
@@ -74,6 +79,7 @@ export class StudentService {
   async createStudent(
     createStudentProps: CreateStudentProps,
   ): Promise<Student> {
+    console.log('coming in create');
     const { name, phone, email, address, familyId } = createStudentProps;
 
     // Verify if student by name or by phone or by email already exists.
@@ -82,6 +88,8 @@ export class StudentService {
       phone,
       email,
     });
+
+    console.log('student exists: ', studentExists);
     if (studentExists) {
       throw new HttpException(`Student already exists`, HttpStatus.BAD_REQUEST);
     }
@@ -107,10 +115,15 @@ export class StudentService {
       studentFamily =
         await this.studentFamilyService.createFamily(createdStudent);
 
-      // Update student table with the newly created family id.
-      await this.updateStudentById(createdStudent.id, {
+      const updatedStudent = createdStudent.patch({
         familyId: studentFamily.id,
       });
+
+      // Update student table with the newly created family id.
+      await this.studentRepo.updateStudentById(
+        createdStudent.id,
+        updatedStudent,
+      );
     }
 
     // return the updated student object from the student table
@@ -150,8 +163,21 @@ export class StudentService {
   ): Promise<Student> {
     // Get student details from the student id.
     const student = await this.getStudentById(id);
+    const { name: existingName, family } = student;
 
+    let isOwner = false;
+    if (student.id === family.ownerId) {
+      isOwner = true;
+    }
     const { name, phone, email, address, familyId } = props;
+
+    console.log(family.id, familyId);
+    if (isOwner && family.id !== familyId) {
+      throw new HttpException(
+        `Ownership cannot be changed at this time.`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     // Update the student object.
     const updatedStudentEntity = student.patch({
@@ -165,7 +191,20 @@ export class StudentService {
     // Update student by student id and the student props.
     await this.studentRepo.updateStudentById(id, updatedStudentEntity);
 
+    // If there's a name change, this should change in family table as well
+    if (isOwner && existingName !== name) {
+      const newStudentFamily: StudentFamily = family.patch({
+        familyName: name,
+      });
+
+      await this.studentFamilyService.updateFamily(family.id, newStudentFamily);
+    }
+
     // Return the updated student object.
     return await this.getStudentById(id);
+  }
+
+  async getStudentsCount(): Promise<number> {
+    return await this.studentRepo.getStudentsCount();
   }
 }

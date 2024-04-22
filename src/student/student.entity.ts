@@ -12,6 +12,11 @@ export interface StudentProps {
   readonly updatedAt?: Date;
 }
 
+export interface StudentPropsWithCount {
+  readonly results: Student[];
+  readonly count: number;
+}
+
 export interface CreateStudentProps {
   readonly name: string;
   readonly phone?: string;

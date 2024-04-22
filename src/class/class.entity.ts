@@ -1,12 +1,29 @@
 import { Entity, proxyEntity } from 'entity';
 import { StudentFeeProps } from 'src/class_student/class_student.entity';
-import { Student } from 'src/student/student.entity';
 
 export interface ClassProps {
   readonly date: string;
   readonly time: string;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
+}
+
+export interface ClassStudentProps {
+  readonly classId: number;
+  readonly date: string;
+  readonly time: string;
+  readonly students: StudentNameFeeProps[];
+}
+
+export interface ClassStudentPropsWithCount {
+  readonly results: ClassStudentProps[];
+  readonly count: number;
+}
+
+export interface StudentNameFeeProps {
+  studentId: number;
+  fee: number;
+  studentName: string;
 }
 
 export interface CreateClassProps {

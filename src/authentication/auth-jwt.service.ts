@@ -3,6 +3,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { Algorithm } from 'jsonwebtoken';
 import appConfig from '../config/app-config';
 import { User } from '../user/user.entity';
+import { JwtPayload } from './authentication.entity';
 
 @Injectable()
 export class AuthJwtService {
@@ -14,8 +15,9 @@ export class AuthJwtService {
    * @returns Access Token
    */
   async generateAccessToken(user: User): Promise<string> {
-    const jwtPayload = {
+    const jwtPayload: JwtPayload = {
       sub: user.uniqueId,
+      email: user.email,
     };
     const jwtSignOptions: JwtSignOptions = {
       algorithm: appConfig().jwtAlgorithm as Algorithm,
@@ -37,6 +39,7 @@ export class AuthJwtService {
   async generateRefreshToken(user: User): Promise<string> {
     const jwtPayload = {
       sub: user.uniqueId,
+      email: user.email,
     };
     const jwtSignOptions: JwtSignOptions = {
       algorithm: appConfig().jwtAlgorithm as Algorithm,

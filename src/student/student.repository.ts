@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { StudentModel } from './student.model';
 import { StudentMap } from './student.datamapper';
-import { Student, StudentProps } from './student.entity';
+import { Student, StudentProps, StudentPropsWithCount } from './student.entity';
 import { Op } from 'sequelize';
 import { StudentFamilyModel } from 'src/student_family/student_family.model';
+import { PaginationParams } from 'src/common/pagination.entity';
 
 @Injectable()
 export class StudentRepository {
@@ -37,9 +38,28 @@ export class StudentRepository {
    * Get students
    * @returns Students
    */
-  async getStudents(): Promise<Student[]> {
-    const modelInstances = await this.studentModel.findAll();
-    return modelInstances.map((e) => StudentMap.toDomain(e));
+  async getStudents(
+    paginationParams: PaginationParams,
+  ): Promise<StudentPropsWithCount> {
+    const { offset, limit } = paginationParams;
+    const students = await this.studentModel.findAndCountAll({
+      limit: limit,
+      offset: offset,
+      distinct: true,
+      include: [
+        {
+          model: StudentFamilyModel,
+          as: 'family',
+        },
+      ],
+    });
+
+    const paginatedResults = {
+      results: students.rows.map((e) => StudentMap.toDomain(e)),
+      count: students.count,
+    };
+
+    return paginatedResults;
   }
 
   /**
@@ -69,6 +89,7 @@ export class StudentRepository {
    */
   async getStudentCount(props: StudentProps): Promise<boolean> {
     const { name, phone, email } = props;
+    console.log('name: ', name, 'phone:', phone, 'email: ', email);
     const conditions = [];
 
     if (name) {
@@ -88,7 +109,8 @@ export class StudentRepository {
     };
 
     const count = await this.studentModel.count(condition);
-    return count === 1;
+
+    return count > 0;
   }
 
   /**
@@ -137,5 +159,9 @@ export class StudentRepository {
   ): Promise<void> {
     const raw = StudentMap.toPersistence(updatedStudentEntity);
     await this.studentModel.update(raw, { where: { id } });
+  }
+
+  async getStudentsCount(): Promise<number> {
+    return await this.studentModel.count();
   }
 }

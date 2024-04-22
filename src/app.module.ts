@@ -10,6 +10,7 @@ import { StudentPaymentModule } from './student_payment/student_payment.module';
 import { UserModule } from './user/user.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { RefreshTokenTrackerModule } from './refresh-token-tracker/refresh-token-tracker.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RefreshTokenTrackerModule } from './refresh-token-tracker/refresh-token
     UserModule,
     AuthenticationModule,
     RefreshTokenTrackerModule,
+    DashboardModule,
   ],
   controllers: [],
   providers: [],
