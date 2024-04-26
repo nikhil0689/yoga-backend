@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { RefreshTokenTrackerModule } from './refresh-token-tracker/refresh-token-tracker.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { TestModule } from './test/test.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     AuthenticationModule,
     RefreshTokenTrackerModule,
     DashboardModule,
+    TestModule,
   ],
   controllers: [],
   providers: [],
