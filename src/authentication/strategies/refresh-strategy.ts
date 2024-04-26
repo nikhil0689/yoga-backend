@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, ExtractJwt } from 'passport-jwt';
+import { ExtractJwt } from 'passport-jwt';
 import { AuthenticationService } from '../authentication.service';
 import appConfig from 'src/config/app-config';
 import { Request } from 'express';
+import { Strategy } from 'passport-local';
 
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
