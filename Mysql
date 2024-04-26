@@ -1,27 +1,19 @@
+# User table
+
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `phone` varchar(45) DEFAULT NULL,
+  `unique_id` varchar(20) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  `address` varchar(45) DEFAULT NULL,
-  `family_id` int DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `first_name` varchar(45) DEFAULT NULL,
+  `password` varchar(45) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `family_id_fk_idx` (`family_id`),
-  CONSTRAINT `family_id_fk` FOREIGN KEY (`family_id`) REFERENCES `family` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  UNIQUE KEY `unique_id_UNIQUE` (`unique_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
-CREATE TABLE `family` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `family_name` varchar(45) DEFAULT NULL,
-  `owner_id` int DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `owner_id_fk_idx` (`owner_id`),
-  CONSTRAINT `owner_id_fk` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+# Class Table 
 
 CREATE TABLE `class` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -30,7 +22,9 @@ CREATE TABLE `class` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+# Class student
 
 CREATE TABLE `class_student` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -43,8 +37,49 @@ CREATE TABLE `class_student` (
   KEY `class_id_fk_idx` (`class_id`),
   KEY `student_id_fk_idx` (`student_id`),
   CONSTRAINT `class_id_fk` FOREIGN KEY (`class_id`) REFERENCES `class` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `student_id_fk` FOREIGN KEY (`student_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  CONSTRAINT `student_id_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=190 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+# Family 
+
+CREATE TABLE `family` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `family_name` varchar(45) DEFAULT NULL,
+  `owner_id` int DEFAULT NULL,
+  `balance` int DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `owner_id_fk_idx` (`owner_id`),
+  CONSTRAINT `owner_id_fk` FOREIGN KEY (`owner_id`) REFERENCES `student` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+# Refresh token tracker 
+
+CREATE TABLE `refresh_token_tracker` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(20) DEFAULT NULL,
+  `refresh_token_hash` varchar(190) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+# Student 
+
+CREATE TABLE `student` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `address` varchar(45) DEFAULT NULL,
+  `family_id` int DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `family_id_fk_idx` (`family_id`),
+  CONSTRAINT `family_id_fk` FOREIGN KEY (`family_id`) REFERENCES `family` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `student_payment` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -55,16 +90,5 @@ CREATE TABLE `student_payment` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `student_id_fk_idx` (`student_id`),
-  CONSTRAINT `student_id_fk1` FOREIGN KEY (`student_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-
-CREATE TABLE `student_payment_balance` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `student_id` int DEFAULT NULL,
-  `balance` int DEFAULT '0',
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `student_id_fk_2_idx` (`student_id`),
-  CONSTRAINT `student_id_fk_2` FOREIGN KEY (`student_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  CONSTRAINT `student_id_fk1` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

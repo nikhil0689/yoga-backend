@@ -144,7 +144,6 @@ export class ClassService {
    * @returns Class
    */
   async updateClass(id, updateClassProps: UpdateClassProps): Promise<Class> {
-    console.log('coming inside service: ', id, updateClassProps);
     const _class = await this.getClassById(id);
     const { date, time, studentFee } = updateClassProps;
 

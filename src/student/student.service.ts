@@ -79,7 +79,6 @@ export class StudentService {
   async createStudent(
     createStudentProps: CreateStudentProps,
   ): Promise<Student> {
-    console.log('coming in create');
     const { name, phone, email, address, familyId } = createStudentProps;
 
     // Verify if student by name or by phone or by email already exists.
@@ -89,7 +88,6 @@ export class StudentService {
       email,
     });
 
-    console.log('student exists: ', studentExists);
     if (studentExists) {
       throw new HttpException(`Student already exists`, HttpStatus.BAD_REQUEST);
     }
@@ -171,7 +169,6 @@ export class StudentService {
     }
     const { name, phone, email, address, familyId } = props;
 
-    console.log(family.id, familyId);
     if (isOwner && family.id !== familyId) {
       throw new HttpException(
         `Ownership cannot be changed at this time.`,

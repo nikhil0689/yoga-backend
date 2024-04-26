@@ -50,7 +50,6 @@ export class AuthenticationController {
   ) {
     const { accessToken, refreshToken } =
       await this.authenticationService.login(user);
-    console.log('user details: ', user);
     response.cookie('jwt', refreshToken, {
       httpOnly: true,
       sameSite: 'none',
@@ -72,7 +71,6 @@ export class AuthenticationController {
     @RequestUser('refreshToken') refreshToken: string,
     @Res() response: Response,
   ) {
-    console.log('coming inside refresh, ', refreshToken);
     const user = await this.userService.getUserById(userId);
     const { accessToken, refreshToken: newRefreshToken } =
       await this.authenticationService.refreshTokens(userId, refreshToken);

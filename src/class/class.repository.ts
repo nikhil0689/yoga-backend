@@ -6,7 +6,6 @@ import { ClassMap } from './class.datamapper';
 import { ClassStudentModel } from 'src/class_student/class_student.model';
 import { StudentModel } from 'src/student/student.model';
 import { PaginationParams } from 'src/common/pagination.entity';
-import { Op, Sequelize } from 'sequelize';
 
 @Injectable()
 export class ClassRepository {
@@ -72,38 +71,6 @@ export class ClassRepository {
         },
       ],
     });
-
-    // await this.roCollaboratorModel.findAll({
-    //   attributes: [
-    //     ['workspace_id', 'primaryKey'],
-    //     [
-    //       Sequelize.fn('COUNT', Sequelize.col('workspace_id')),
-    //       'numberOfCollaborators',
-    //     ],
-    //   ],
-    //   group: 'workspace_id',
-    //   raw: true,
-    //   where: {
-    //     workspacePrimaryKey: {
-    //       [Op.in]: workspacePrimaryKeys,
-    //     },
-    //   },
-
-    // const classesForLast7Days = await this.classModel.findAll({
-    //   attributes: [
-    //     ['id', 'id'],
-    //     [Sequelize.fn('COUNT', Sequelize.col('id')), 'classCount'],
-    //   ],
-    //   group: 'date',
-    //   raw: true,
-    //   where: {
-    //     date: {
-    //       [Op.gt]: new Date('2024-04-05'),
-    //     },
-    //   },
-    // });
-
-    // console.log(classesForLast7Days);
 
     const paginatedResults = {
       results: classes.rows.map((e) => ClassMap.toClassStudentDomain(e)),

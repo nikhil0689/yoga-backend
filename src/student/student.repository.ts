@@ -89,7 +89,6 @@ export class StudentRepository {
    */
   async getStudentCount(props: StudentProps): Promise<boolean> {
     const { name, phone, email } = props;
-    console.log('name: ', name, 'phone:', phone, 'email: ', email);
     const conditions = [];
 
     if (name) {
