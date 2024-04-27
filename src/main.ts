@@ -13,7 +13,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: 'https://main.d2pnbjr9ygld4f.amplifyapp.com',
+    origin: 'http://yoga-ui.s3-website-us-east-1.amazonaws.com',
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
       'Content-Type',
