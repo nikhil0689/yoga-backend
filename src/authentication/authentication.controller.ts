@@ -54,6 +54,7 @@ export class AuthenticationController {
       httpOnly: true,
       sameSite: 'none',
       secure: true,
+      maxAge: 99999999,
     });
     response.json({ accessToken, user });
   }
@@ -79,6 +80,7 @@ export class AuthenticationController {
       httpOnly: true,
       sameSite: 'none',
       secure: true,
+      maxAge: 99999999,
     });
     response.json({ accessToken, user });
   }
