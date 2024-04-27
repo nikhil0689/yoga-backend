@@ -33,7 +33,8 @@ async function bootstrap() {
   // Configure Open API
   configureOpenAPI(app);
 
-  const port = process.env.SERVER_PORT ?? 3001;
+  const port = process.env.SERVER_PORT;
   await app.listen(port);
+  console.log('server started on port: ', port);
 }
 bootstrap();
