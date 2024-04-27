@@ -23,6 +23,7 @@ async function bootstrap() {
     ],
     credentials: true,
   });
+  console.log('cors passed');
 
   // Route prefix
   app.setGlobalPrefix(globalPrefix);
