@@ -163,7 +163,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/yoga-serverless-backend/dev/1714361452956-2024-04-29T03:30:52.956Z/yoga-serverless-backend.zip"
+          "S3Key": "serverless/yoga-serverless-backend/dev/1714367886344-2024-04-29T05:18:06.344Z/yoga-serverless-backend.zip"
         },
         "Handler": "dist/src/lambda.handler",
         "Runtime": "nodejs20.x",
@@ -184,14 +184,14 @@
         "ApiLogGroup"
       ]
     },
-    "ApiLambdaVersionhORPY5C0IWjh1gqX4Cg57fMmLReNlCfF4jHOcDJ7eA": {
+    "ApiLambdaVersionb3eIvyMgBdK1qXDz0oL3r2KmKzXIBNsQjGl08Dxc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "NQZKdH3BcirKT0TRSr3ALxwlY3r45k1o34XNsjEmsZY="
+        "CodeSha256": "Db90KBAz5Fxs/MWbabEiFh++a3qgsxNHODyPDpwnURk="
       }
     },
     "HttpApi": {
@@ -302,7 +302,7 @@
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersionhORPY5C0IWjh1gqX4Cg57fMmLReNlCfF4jHOcDJ7eA"
+        "Ref": "ApiLambdaVersionb3eIvyMgBdK1qXDz0oL3r2KmKzXIBNsQjGl08Dxc"
       },
       "Export": {
         "Name": "sls-yoga-serverless-backend-dev-ApiLambdaFunctionQualifiedArn"
