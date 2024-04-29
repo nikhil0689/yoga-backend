@@ -11,10 +11,7 @@ export class RefreshTokenTracker extends Entity<RefreshTokenTrackerProps> {
   private constructor(props: RefreshTokenTrackerProps) {
     super(props);
   }
-  static create(
-    props: RefreshTokenTrackerProps,
-    id?: string,
-  ): RefreshTokenTracker {
+  static create(props: RefreshTokenTrackerProps): RefreshTokenTracker {
     return proxyEntity(new RefreshTokenTracker(props));
   }
 }

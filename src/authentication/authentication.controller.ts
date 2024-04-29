@@ -29,7 +29,6 @@ export class AuthenticationController {
   @UseGuards(JwtAuthGuard)
   @Post('/logout')
   async logout(@RequestUserId() userId: string, @Res() response: Response) {
-    console.log('userId being logged out: ', userId);
     await this.authenticationService.logOut(userId);
     response.clearCookie('jwt');
     response.json(true);
@@ -50,13 +49,8 @@ export class AuthenticationController {
   ) {
     const { accessToken, refreshToken } =
       await this.authenticationService.login(user);
-    response.cookie('jwt', refreshToken, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
-      maxAge: 99999999,
-    });
-    response.json({ accessToken, user });
+
+    response.json({ accessToken, refreshToken, user });
   }
 
   @YogaApi({
@@ -75,13 +69,6 @@ export class AuthenticationController {
     const user = await this.userService.getUserById(userId);
     const { accessToken, refreshToken: newRefreshToken } =
       await this.authenticationService.refreshTokens(userId, refreshToken);
-
-    response.cookie('jwt', newRefreshToken, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
-      maxAge: 99999999,
-    });
-    response.json({ accessToken, user });
+    response.json({ accessToken, refreshToken: newRefreshToken, user });
   }
 }

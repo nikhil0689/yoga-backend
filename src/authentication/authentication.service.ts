@@ -5,7 +5,6 @@ import { UserService } from 'src/user/user.service';
 import { hash } from '../utils';
 import { RefreshTokenTrackerService } from 'src/refresh-token-tracker/refresh-token-tracker.service';
 import { User } from 'src/user/user.entity';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthenticationService {
@@ -52,17 +51,14 @@ export class AuthenticationService {
     // Get user details
     const user = await this.userService.getUserById(userId);
 
+    // Compare if the refresh token in the input matches with the hash from tracker
+    const incomingRefreshTokenHash = await hash(refreshToken);
+
     // Get refresh token tracker details from the tracker
-    const refreshTokenTracker =
+    const { refreshTokenHash: existingHash } =
       await this.refreshTokenTrackerService.getRefreshTokenHashByUserId(userId);
 
-    // Compare if the refresh token in the input matches with the hash from tracker
-    const refreshTokensMatch = await bcrypt.compare(
-      refreshToken,
-      refreshTokenTracker.refreshTokenHash,
-    );
-
-    if (!refreshTokensMatch) {
+    if (incomingRefreshTokenHash !== existingHash) {
       throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
     }
 
@@ -72,7 +68,7 @@ export class AuthenticationService {
       await this.authJwtService.generateRefreshToken(user);
 
     // Update the new hash of refresh token in the tracker
-    await this.updateRefreshTokenHashByUserId(user.uniqueId, refreshToken);
+    await this.updateRefreshTokenHashByUserId(user.uniqueId, newRefreshToken);
 
     return { accessToken, refreshToken: newRefreshToken };
   }

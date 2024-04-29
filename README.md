@@ -27,3 +27,8 @@ GET /payments/id - Get Payment by id
 GET /payments - Get all Payments
 PATCH /payments/id - Update a Payment
 DELETE /payments/id - Delete a Payment
+
+AWS Lambda/ Gateway inputs
+npm run build
+sls offline -> Verify routes locally
+sls deploy
