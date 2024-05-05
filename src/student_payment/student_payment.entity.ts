@@ -15,6 +15,12 @@ export interface StudentPaymentsWithCount {
   readonly count: number;
 }
 
+export interface MonthlyPaymentProps {
+  readonly year: number;
+  readonly month: string;
+  readonly payments: number;
+}
+
 export interface AddStudentPaymentProps {
   readonly studentId: number;
   readonly date: string;

@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { StudentPaymentRepository } from './student_payment.repository';
 import {
   AddStudentPaymentProps,
+  MonthlyPaymentProps,
   StudentPayment,
   StudentPaymentsWithCount,
   UpdateStudentPaymentProps,
@@ -154,5 +155,9 @@ export class StudentPaymentService {
 
   async getStudentPaymentsTotal(): Promise<number> {
     return await this.studentPaymentRepo.getStudentPaymentsTotal();
+  }
+
+  async getMonthlyPaymentsStats(year: number): Promise<MonthlyPaymentProps[]> {
+    return this.studentPaymentRepo.getMonthlyPaymentsStats(year);
   }
 }

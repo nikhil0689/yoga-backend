@@ -15,6 +15,12 @@ export interface ClassStudentProps {
   readonly students: StudentNameFeeProps[];
 }
 
+export interface MonthlyClassProps {
+  readonly year: number;
+  readonly month: string;
+  readonly classes: number;
+}
+
 export interface ClassStudentPropsWithCount {
   readonly results: ClassStudentProps[];
   readonly count: number;

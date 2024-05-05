@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { ClassModel } from './class.model';
-import { Class, ClassStudentPropsWithCount } from './class.entity';
+import {
+  Class,
+  ClassStudentPropsWithCount,
+  MonthlyClassProps,
+} from './class.entity';
 import { ClassMap } from './class.datamapper';
 import { ClassStudentModel } from 'src/class_student/class_student.model';
 import { StudentModel } from 'src/student/student.model';
 import { PaginationParams } from 'src/common/pagination.entity';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class ClassRepository {
@@ -115,5 +120,26 @@ export class ClassRepository {
         id,
       },
     });
+  }
+
+  async getMonthlyClassesStats(year): Promise<MonthlyClassProps[]> {
+    const monthlyClasses = await this.classModel.findAll({
+      attributes: [
+        [Sequelize.fn('YEAR', Sequelize.col('date')), 'year'],
+        [Sequelize.fn('MONTH', Sequelize.col('date')), 'month'],
+        [Sequelize.fn('COUNT', Sequelize.col('*')), 'num_classes'],
+      ],
+      where: Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('date')), year),
+      group: [
+        Sequelize.fn('YEAR', Sequelize.col('date')),
+        Sequelize.fn('MONTH', Sequelize.col('date')),
+      ],
+      order: [
+        Sequelize.fn('YEAR', Sequelize.col('date')),
+        Sequelize.fn('MONTH', Sequelize.col('date')),
+      ],
+    });
+
+    return ClassMap.toMonthlyClassesInYearDomain(monthlyClasses);
   }
 }

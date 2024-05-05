@@ -4,6 +4,8 @@ import { StudentService } from 'src/student/student.service';
 import { StudentFamilyService } from 'src/student_family/student_family.service';
 import { StudentPaymentService } from 'src/student_payment/student_payment.service';
 import { DashboardStats } from './dashboard.entity';
+import { MonthlyClassProps } from 'src/class/class.entity';
+import { MonthlyPaymentProps } from 'src/student_payment/student_payment.entity';
 
 @Injectable()
 export class DashboardService {
@@ -30,5 +32,13 @@ export class DashboardService {
     });
 
     return stats;
+  }
+
+  async getMonthlyClassesStats(year: number): Promise<MonthlyClassProps[]> {
+    return await this.classService.getMonthlyClassesStats(year);
+  }
+
+  async getMonthlyPaymentsStats(year: number): Promise<MonthlyPaymentProps[]> {
+    return await this.studentPaymentService.getMonthlyPaymentsStats(year);
   }
 }

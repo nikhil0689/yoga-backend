@@ -2,6 +2,7 @@ import {
   Class,
   ClassStudentProps,
   ClassStudentPropsWithCount,
+  MonthlyClassProps,
   StudentNameFeeProps,
 } from './class.entity';
 import { ClassModel } from './class.model';
@@ -11,6 +12,21 @@ import {
   PaginatedClassStudentResponseDTO,
   StudentFeeResponseDTO,
 } from './dtos/class.dto';
+
+enum Month {
+  Jan = 1,
+  Feb = 2,
+  Mar = 3,
+  Apr = 4,
+  May = 5,
+  Jun = 6,
+  Jul = 7,
+  Aug = 8,
+  Sep = 9,
+  Oct = 10,
+  Nov = 11,
+  Dec = 12,
+}
 
 export class ClassMap {
   static toDomain(model: ClassModel): Class {
@@ -49,6 +65,26 @@ export class ClassMap {
 
     return data;
   }
+
+  static toMonthlyClassesInYearDomain(
+    monthlyClasses: ClassModel[],
+  ): MonthlyClassProps[] {
+    if (!monthlyClasses) {
+      return null;
+    }
+
+    const data = monthlyClasses.map((e) => ({
+      year: e.get('year') as number,
+      month: this.getMonthName(e.get('month') as number),
+      classes: e.get('num_classes') as number,
+    }));
+
+    return data;
+  }
+
+  static getMonthName = (month: number): string => {
+    return Month[month];
+  };
 
   static toPersistence(entity: Class): ClassModel {
     const { date, time } = entity.props;

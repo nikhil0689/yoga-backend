@@ -4,6 +4,7 @@ import {
   ClassStudentProps,
   ClassStudentPropsWithCount,
   CreateClassProps,
+  MonthlyClassProps,
   UpdateClassProps,
 } from './class.entity';
 import { ClassRepository } from './class.repository';
@@ -266,5 +267,9 @@ export class ClassService {
 
   async getClassesCount(): Promise<number> {
     return this.classRepo.getClassesCount();
+  }
+
+  async getMonthlyClassesStats(year: number): Promise<MonthlyClassProps[]> {
+    return this.classRepo.getMonthlyClassesStats(year);
   }
 }
