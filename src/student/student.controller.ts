@@ -50,6 +50,18 @@ export class StudentController {
     description: 'Get all Students',
     apiId: 'yoga-2',
   })
+  @Get('all/students')
+  async getAllStudents(): Promise<PaginatedStudentResponseDTO> {
+    const students = await this.studentService.getAllStudents();
+    return StudentMap.toPaginatedStudentCountDTO(students);
+  }
+
+  @YogaApi({
+    tag: API_TAG_STUDENT,
+    summary: 'Get all Students',
+    description: 'Get all Students',
+    apiId: 'yoga-2',
+  })
   @Get()
   async getStudents(
     @Query('page') page: number,

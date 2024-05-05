@@ -62,6 +62,19 @@ export class StudentRepository {
     return paginatedResults;
   }
 
+  async getAllStudents(): Promise<StudentPropsWithCount> {
+    const students = await this.studentModel.findAndCountAll({
+      distinct: true,
+    });
+
+    const paginatedResults = {
+      results: students.rows.map((e) => StudentMap.toDomain(e)),
+      count: students.count,
+    };
+
+    return paginatedResults;
+  }
+
   /**
    * Get student by Phone
    * @param phone

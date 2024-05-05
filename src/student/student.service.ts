@@ -56,6 +56,14 @@ export class StudentService {
   }
 
   /**
+   * Get Students
+   * @returns Students
+   */
+  async getAllStudents(): Promise<StudentPropsWithCount> {
+    return await this.studentRepo.getAllStudents();
+  }
+
+  /**
    * Get student data by phone number
    * @param phone
    * @returns Student
