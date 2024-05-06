@@ -11,18 +11,19 @@ import { StudentModel } from 'src/student/student.model';
 import { StudentFamilyModel } from 'src/student_family/student_family.model';
 import { UserModel } from 'src/user/user.model';
 import { RefreshTokenTrackerModel } from 'src/refresh-token-tracker/refresh-token-tracker.model';
+import appConfig from './app-config';
 
 export const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: async (): Promise<SequelizeModuleOptions> => {
     return {
-      dialect: 'mysql',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10),
-      username: process.env.DB_USERNAME,
-      database: process.env.DB_DATABASE,
-      password: process.env.DB_PASSWORD,
+      dialect: appConfig().dialect as Dialect,
+      host: appConfig().dbHost,
+      port: parseInt(appConfig().dbPort, 10),
+      username: appConfig().dbUserName,
+      database: appConfig().dbDatabase,
+      password: appConfig().dbPassword,
       synchronize: false,
       logging: false,
       models: [

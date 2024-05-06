@@ -3,20 +3,18 @@ import { AppModule } from './app.module';
 import { configureOpenAPI } from './common/openapi/configure-open-api';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
+import appConfig from './config/app-config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const version = process.env.VERSION;
+  const version = appConfig().version;
   const globalPrefix = `api/${version}`;
 
   app.use(cookieParser());
 
   app.enableCors({
-    origin: [
-      'https://main.d35odw21oyjve2.amplifyapp.com',
-      'http://localhost:5173',
-    ],
+    origin: [appConfig().origin],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
       'Content-Type',
@@ -36,7 +34,7 @@ async function bootstrap() {
   // Configure Open API
   configureOpenAPI(app);
 
-  const port = process.env.SERVER_PORT;
+  const port = appConfig().serverPort;
   await app.listen(port);
 }
 bootstrap();

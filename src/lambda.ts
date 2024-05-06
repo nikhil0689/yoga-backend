@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { configureOpenAPI } from './common/openapi/configure-open-api';
+import appConfig from './config/app-config';
 
 let cachedServer;
 
@@ -11,16 +12,13 @@ export const handler = async (event, context) => {
   if (!cachedServer) {
     const nestApp = await NestFactory.create(AppModule);
 
-    const version = process.env.VERSION;
+    const version = appConfig().version;
     const globalPrefix = `api/${version}`;
 
     nestApp.use(cookieParser());
 
     nestApp.enableCors({
-      origin: [
-        'https://main.d35odw21oyjve2.amplifyapp.com',
-        'http://localhost:5173',
-      ],
+      origin: [appConfig().origin],
       methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
       allowedHeaders: [
         'Content-Type',

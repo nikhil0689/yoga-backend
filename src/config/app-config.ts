@@ -10,4 +10,13 @@ export default () => ({
   secure: process.env.SECURE,
   accessTokenName: process.env.ACCESS_TOKEN_NAME,
   refreshTokenName: process.env.REFRESH_TOKEN_NAME,
+  origin: process.env.ORIGIN,
+  version: process.env.VERSION,
+  serverPort: process.env.SERVER_PORT,
+  dialect: process.env.DIALECT,
+  dbHost: process.env.DB_HOST,
+  dbPort: process.env.DB_PORT,
+  dbUserName: process.env.DB_USERNAME,
+  dbPassword: process.env.DB_PASSWORD,
+  dbDatabase: process.env.DB_DATABASE,
 });
