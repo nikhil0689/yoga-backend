@@ -60,7 +60,7 @@ export class ClassRepository {
       limit: limit,
       offset: offset,
       distinct: true,
-      order: [['id', 'DESC']],
+      order: [['date', 'DESC']],
       include: [
         {
           model: ClassStudentModel,

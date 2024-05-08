@@ -91,4 +91,4 @@ CREATE TABLE `student_payment` (
   PRIMARY KEY (`id`),
   KEY `student_id_fk_idx` (`student_id`),
   CONSTRAINT `student_id_fk1` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
