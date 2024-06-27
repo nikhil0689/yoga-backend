@@ -27,6 +27,9 @@ export class StudentResponseDTO {
   readonly family: StudentFamily;
 
   @ApiProperty()
+  readonly classCount: number;
+
+  @ApiProperty()
   readonly createdAt: Date;
 
   @ApiProperty()

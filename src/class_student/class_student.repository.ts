@@ -79,4 +79,12 @@ export class ClassStudentRepository {
     });
     return instances.map((e) => ClassStudentMap.toDomain(e));
   }
+
+  async getStudentClassCount(studentId: number): Promise<number> {
+    return await this.classStudentModel.count({
+      where: {
+        studentId,
+      },
+    });
+  }
 }

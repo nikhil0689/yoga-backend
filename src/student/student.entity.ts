@@ -8,6 +8,7 @@ export interface StudentProps {
   readonly address?: string;
   readonly familyId?: number;
   readonly family?: StudentFamily;
+  readonly classCount?: number;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

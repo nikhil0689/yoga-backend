@@ -10,12 +10,14 @@ import { StudentFamilyService } from 'src/student_family/student_family.service'
 import { valueExists } from 'src/utils';
 import { StudentFamily } from 'src/student_family/student_family.entity';
 import { PaginationParams } from 'src/common/pagination.entity';
+import { ClassStudentService } from 'src/class_student/class_student.service';
 
 @Injectable()
 export class StudentService {
   constructor(
     private readonly studentRepo: StudentRepository,
     private readonly studentFamilyService: StudentFamilyService,
+    private readonly classStudentService: ClassStudentService,
   ) {}
 
   /**
@@ -52,7 +54,26 @@ export class StudentService {
   async getStudents(
     paginationParams: PaginationParams,
   ): Promise<StudentPropsWithCount> {
-    return await this.studentRepo.getStudents(paginationParams);
+    const { results, count } =
+      await this.studentRepo.getStudents(paginationParams);
+
+    const st = await Promise.all(
+      results.map(async (e) => {
+        console.log(e.id);
+        const studentId = e.id;
+        const classesCount = await this.getStudentClassCount(studentId);
+        const newStudent = e.patch({
+          classCount: classesCount,
+        });
+        return newStudent;
+      }),
+    );
+
+    return { results: st, count };
+  }
+
+  async getStudentClassCount(studentId: number): Promise<number> {
+    return await this.classStudentService.getStudentClassCount(studentId);
   }
 
   /**

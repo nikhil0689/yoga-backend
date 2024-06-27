@@ -63,6 +63,7 @@ export class StudentMap {
       isOwner,
       familyId,
       family,
+      classCount,
       createdAt,
       updatedAt,
     } = entity;
@@ -75,6 +76,7 @@ export class StudentMap {
       isOwner,
       familyId,
       family,
+      classCount,
       createdAt,
       updatedAt,
     };

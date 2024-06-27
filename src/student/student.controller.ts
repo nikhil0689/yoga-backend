@@ -72,7 +72,9 @@ export class StudentController {
       size,
     );
     const students = await this.studentService.getStudents(paginationParams);
-    return StudentMap.toPaginatedStudentCountDTO(students);
+    const sm = StudentMap.toPaginatedStudentCountDTO(students);
+    console.log(sm);
+    return sm;
   }
 
   @YogaApi({

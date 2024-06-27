@@ -40,4 +40,8 @@ export class ClassStudentService {
   async deleteByClassId(id: number): Promise<void> {
     await this.classStudentRepo.deleteByClassId(id);
   }
+
+  async getStudentClassCount(studentId: number): Promise<number> {
+    return await this.classStudentRepo.getStudentClassCount(studentId);
+  }
 }
