@@ -1,4 +1,5 @@
 import { Entity, proxyEntity } from 'entity';
+import { ClassStudent } from 'src/class_student/class_student.entity';
 import { StudentFamily } from 'src/student_family/student_family.entity';
 
 export interface StudentProps {
@@ -15,6 +16,11 @@ export interface StudentProps {
 
 export interface StudentPropsWithCount {
   readonly results: Student[];
+  readonly count: number;
+}
+
+export interface StudentClassesPropsWithCount {
+  readonly results: ClassStudent[];
   readonly count: number;
 }
 

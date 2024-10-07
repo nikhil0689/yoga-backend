@@ -5,6 +5,8 @@ import { ClassStudent } from './class_student.entity';
 import { ClassStudentMap } from './class_student.datamapper';
 import { StudentModel } from 'src/student/student.model';
 import { ClassModel } from 'src/class/class.model';
+import { StudentClassesPropsWithCount } from 'src/student/student.entity';
+import { PaginationParams } from 'src/common/pagination.entity';
 
 @Injectable()
 export class ClassStudentRepository {
@@ -22,6 +24,38 @@ export class ClassStudentRepository {
   ): Promise<void> {
     const rawData = classStudents.map((e) => ClassStudentMap.toPersistence(e));
     await this.classStudentModel.bulkCreate(rawData);
+  }
+
+  async getClassesByStudentId(
+    id: number,
+    paginationParams: PaginationParams,
+  ): Promise<StudentClassesPropsWithCount> {
+    const { offset, limit } = paginationParams;
+    const instances = await this.classStudentModel.findAndCountAll({
+      limit: limit,
+      offset: offset,
+      distinct: true,
+      order: [['id', 'DESC']],
+      where: {
+        studentId: id,
+      },
+      include: [
+        {
+          model: ClassModel,
+          as: '_class',
+        },
+        {
+          model: StudentModel,
+          as: 'student',
+        },
+      ],
+    });
+    const paginatedResults = {
+      results: instances.rows.map((e) => ClassStudentMap.toDomain(e)),
+      count: instances.count,
+    };
+
+    return paginatedResults;
   }
 
   /**

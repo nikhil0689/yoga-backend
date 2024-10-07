@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ClassStudent } from './class_student.entity';
 import { ClassStudentRepository } from './class_student.repository';
+import { StudentClassesPropsWithCount } from 'src/student/student.entity';
+import { PaginationParams } from 'src/common/pagination.entity';
 
 @Injectable()
 export class ClassStudentService {
@@ -14,6 +16,16 @@ export class ClassStudentService {
     classStudents: ClassStudent[],
   ): Promise<void> {
     await this.classStudentRepo.createClassStudentRecords(classStudents);
+  }
+
+  async getClassesByStudentId(
+    id: number,
+    paginationParams: PaginationParams,
+  ): Promise<StudentClassesPropsWithCount> {
+    return await this.classStudentRepo.getClassesByStudentId(
+      id,
+      paginationParams,
+    );
   }
 
   /**

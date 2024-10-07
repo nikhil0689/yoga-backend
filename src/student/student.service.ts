@@ -5,6 +5,7 @@ import {
   UpdateStudentProps,
   Student,
   StudentPropsWithCount,
+  StudentClassesPropsWithCount,
 } from './student.entity';
 import { StudentFamilyService } from 'src/student_family/student_family.service';
 import { valueExists } from 'src/utils';
@@ -33,6 +34,13 @@ export class StudentService {
     return student;
   }
 
+  async getClassesByStudentId(
+    id: number,
+    paginationParams: PaginationParams,
+  ): Promise<StudentClassesPropsWithCount> {
+    return this.classStudentService.getClassesByStudentId(id, paginationParams);
+  }
+
   /**
    * Verify if student id exists. If not found, throws error
    * @param studentId
@@ -59,7 +67,6 @@ export class StudentService {
 
     const st = await Promise.all(
       results.map(async (e) => {
-        console.log(e.id);
         const studentId = e.id;
         const classesCount = await this.getStudentClassCount(studentId);
         const newStudent = e.patch({

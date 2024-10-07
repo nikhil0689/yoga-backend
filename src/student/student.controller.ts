@@ -24,6 +24,7 @@ import {
   PaginationParams,
   calculateSizeAndOffset,
 } from 'src/common/pagination.entity';
+import { PaginatedStudentClassesResponseDTO } from './dtos/student-classes-response.dto';
 
 @ApiTags(API_TAG_STUDENT)
 @ApiBearerAuth()
@@ -42,6 +43,29 @@ export class StudentController {
   async getStudentById(@Param('id') id: number): Promise<StudentResponseDTO> {
     const student = await this.studentService.getStudentById(id);
     return StudentMap.toStudentDTO(student);
+  }
+
+  @YogaApi({
+    tag: API_TAG_STUDENT,
+    summary: 'Get Student by Id',
+    description: 'Get Student by Id',
+    apiId: 'yoga-1',
+  })
+  @Get(':id/classes')
+  async getClassesByStudentId(
+    @Param('id') id: number,
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ): Promise<PaginatedStudentClassesResponseDTO> {
+    const paginationParams: PaginationParams = calculateSizeAndOffset(
+      page,
+      size,
+    );
+    const classes = await this.studentService.getClassesByStudentId(
+      id,
+      paginationParams,
+    );
+    return StudentMap.toPaginatedStudentClassesDTO(classes);
   }
 
   @YogaApi({
@@ -72,9 +96,7 @@ export class StudentController {
       size,
     );
     const students = await this.studentService.getStudents(paginationParams);
-    const sm = StudentMap.toPaginatedStudentCountDTO(students);
-    console.log(sm);
-    return sm;
+    return StudentMap.toPaginatedStudentCountDTO(students);
   }
 
   @YogaApi({

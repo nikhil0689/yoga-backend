@@ -1,10 +1,19 @@
+import { ClassStudent } from 'src/class_student/class_student.entity';
 import {
   PaginatedStudentResponseDTO,
   StudentResponseDTO,
 } from './dtos/student-response.dto';
-import { Student, StudentPropsWithCount } from './student.entity';
+import {
+  Student,
+  StudentClassesPropsWithCount,
+  StudentPropsWithCount,
+} from './student.entity';
 import { StudentModel } from './student.model';
 import { StudentFamilyMap } from 'src/student_family/student_family.datamapper';
+import {
+  PaginatedStudentClassesResponseDTO,
+  StudentClassesResponseDTO,
+} from './dtos/student-classes-response.dto';
 
 export class StudentMap {
   static toDomain(model: StudentModel): Student {
@@ -94,6 +103,37 @@ export class StudentMap {
 
     return {
       results: studentsDto,
+      count,
+    };
+  }
+
+  static toStudentClassesDTO(entity: ClassStudent): StudentClassesResponseDTO {
+    if (entity === null) {
+      return null;
+    }
+    const { classId, _class, fee, student, createdAt, updatedAt } = entity;
+    return {
+      classId,
+      _class,
+      fee,
+      student,
+      createdAt,
+      updatedAt,
+    };
+  }
+
+  static toPaginatedStudentClassesDTO(
+    entity: StudentClassesPropsWithCount,
+  ): PaginatedStudentClassesResponseDTO {
+    if (entity === null) {
+      return null;
+    }
+    const { results: data, count } = entity;
+
+    const studentClassesDto = data.map((e) => this.toStudentClassesDTO(e));
+
+    return {
+      results: studentClassesDto,
       count,
     };
   }
